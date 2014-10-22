@@ -44,9 +44,13 @@
     "andThen",
     "currentURL",
     "currentPath",
-    "currentRouteName"
+    "currentRouteName",
+    "it",
+    "describe",
+    "beforeEach",
+    "afterEach"
   ],
-  "node": false,
+  "node": true,
   "browser": false,
   "boss": true,
   "curly": false,

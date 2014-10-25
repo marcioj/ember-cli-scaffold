@@ -16,9 +16,10 @@
   "license": "MIT",
   "devDependencies": {
     "ember-cli": "0.1.2",
+    "fs-extra": "^0.12.0",
+    "lodash-node": "^2.4.1",
     "mocha": "^2.0.1",
-    "rimraf": "^2.2.8",
-    "tmp-sync": "^1.0.1"
+    "rimraf": "^2.2.8"
   },
   "keywords": [
     "ember-addon"

@@ -87,4 +87,18 @@ describe('scaffold blueprint', function() {
       assert.equal(routerJsContent, expected);
     });
   });
+
+  it('not affect other resources in router.js', function() {
+    options.entity.name = 'foo';
+    var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
+    var targetFile = path.join(tmproot, 'app', 'router.js');
+    fs.copySync(sourceFile, targetFile);
+
+    return blueprint.uninstall(options).then(function() {
+      var routerJsContent = fs.readFileSync(targetFile , 'utf8');
+      var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
+
+      assert.equal(routerJsContent, expected);
+    });
+  });
 });

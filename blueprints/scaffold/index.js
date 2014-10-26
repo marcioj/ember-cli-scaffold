@@ -11,8 +11,11 @@ function renderTemplate(name, context) {
 function insertInto(file, match, newContent) {
   fs.ensureFileSync(file);
   var fileContent = fs.readFileSync(file, 'utf8');
+  if (fileContent.indexOf(newContent) !== -1) {
+    return;
+  }
   var index = fileContent.indexOf(match);
-  if (index >= 0) {
+  if (index !== -1) {
     index = index + match.length;
     fileContent =  fileContent.substring(0, index) + newContent + fileContent.substring(index, fileContent.length);
     fs.writeFileSync(file, fileContent);

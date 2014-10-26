@@ -46,6 +46,20 @@ describe('scaffold blueprint', function() {
     });
   });
 
+  it('add the resource definition to router.js when others routes exist', function() {
+    options.entity.name = 'foo';
+    var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
+    var targetFile = path.join(tmproot, 'app', 'router.js');
+    fs.copySync(sourceFile, targetFile);
+
+    return blueprint.install(options).then(function() {
+      var routerJsContent = fs.readFileSync(targetFile , 'utf8');
+      var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-foos-users-resource'), 'utf8');
+
+      assert.equal(routerJsContent, expected);
+    });
+  });
+
   it('removes the resource definition from router.js', function() {
     options.entity.name = 'user';
     var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');

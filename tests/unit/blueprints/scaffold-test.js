@@ -32,73 +32,82 @@ describe('scaffold blueprint', function() {
     return rimraf(tmproot);
   });
 
-  it('add the resource definition to router.js', function() {
-    options.entity.name = 'user';
-    var sourceFile = path.join(root, 'tests', 'fixtures', 'empty-router');
-    var targetFile = path.join(tmproot, 'app', 'router.js');
-    fs.copySync(sourceFile, targetFile);
+  describe('install', function() {
 
-    return blueprint.install(options).then(function() {
-      var routerJsContent = fs.readFileSync(targetFile , 'utf8');
-      var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
+    it('add the resource definition to router.js', function() {
+      options.entity.name = 'user';
+      var sourceFile = path.join(root, 'tests', 'fixtures', 'empty-router');
+      var targetFile = path.join(tmproot, 'app', 'router.js');
+      fs.copySync(sourceFile, targetFile);
 
-      assert.equal(routerJsContent, expected);
+      return blueprint.install(options).then(function() {
+        var routerJsContent = fs.readFileSync(targetFile , 'utf8');
+        var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
+
+        assert.equal(routerJsContent, expected);
+      });
     });
+
+    it('add the resource definition to router.js when others routes exist', function() {
+      options.entity.name = 'foo';
+      var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
+      var targetFile = path.join(tmproot, 'app', 'router.js');
+      fs.copySync(sourceFile, targetFile);
+
+      return blueprint.install(options).then(function() {
+        var routerJsContent = fs.readFileSync(targetFile , 'utf8');
+        var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-foos-users-resource'), 'utf8');
+
+        assert.equal(routerJsContent, expected);
+      });
+    });
+
+    it('not add the same resource twice', function() {
+      options.entity.name = 'user';
+      var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
+      var targetFile = path.join(tmproot, 'app', 'router.js');
+      fs.copySync(sourceFile, targetFile);
+
+      return blueprint.install(options).then(function() {
+        var routerJsContent = fs.readFileSync(targetFile , 'utf8');
+        var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
+
+        assert.equal(routerJsContent, expected);
+      });
+    });
+
   });
 
-  it('add the resource definition to router.js when others routes exist', function() {
-    options.entity.name = 'foo';
-    var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
-    var targetFile = path.join(tmproot, 'app', 'router.js');
-    fs.copySync(sourceFile, targetFile);
+  describe('uninstall', function() {
 
-    return blueprint.install(options).then(function() {
-      var routerJsContent = fs.readFileSync(targetFile , 'utf8');
-      var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-foos-users-resource'), 'utf8');
+    it('removes the resource definition from router.js', function() {
+      options.entity.name = 'user';
+      var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
+      var targetFile = path.join(tmproot, 'app', 'router.js');
+      fs.copySync(sourceFile, targetFile);
 
-      assert.equal(routerJsContent, expected);
+      return blueprint.uninstall(options).then(function() {
+        var routerJsContent = fs.readFileSync(targetFile , 'utf8');
+        var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'empty-router'), 'utf8');
+
+        assert.equal(routerJsContent, expected);
+      });
     });
+
+    it('not affect other resources in router.js', function() {
+      options.entity.name = 'foo';
+      var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
+      var targetFile = path.join(tmproot, 'app', 'router.js');
+      fs.copySync(sourceFile, targetFile);
+
+      return blueprint.uninstall(options).then(function() {
+        var routerJsContent = fs.readFileSync(targetFile , 'utf8');
+        var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
+
+        assert.equal(routerJsContent, expected);
+      });
+    });
+
   });
 
-  it('not add the same resource twice', function() {
-    options.entity.name = 'user';
-    var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
-    var targetFile = path.join(tmproot, 'app', 'router.js');
-    fs.copySync(sourceFile, targetFile);
-
-    return blueprint.install(options).then(function() {
-      var routerJsContent = fs.readFileSync(targetFile , 'utf8');
-      var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
-
-      assert.equal(routerJsContent, expected);
-    });
-  });
-
-  it('removes the resource definition from router.js', function() {
-    options.entity.name = 'user';
-    var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
-    var targetFile = path.join(tmproot, 'app', 'router.js');
-    fs.copySync(sourceFile, targetFile);
-
-    return blueprint.uninstall(options).then(function() {
-      var routerJsContent = fs.readFileSync(targetFile , 'utf8');
-      var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'empty-router'), 'utf8');
-
-      assert.equal(routerJsContent, expected);
-    });
-  });
-
-  it('not affect other resources in router.js', function() {
-    options.entity.name = 'foo';
-    var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
-    var targetFile = path.join(tmproot, 'app', 'router.js');
-    fs.copySync(sourceFile, targetFile);
-
-    return blueprint.uninstall(options).then(function() {
-      var routerJsContent = fs.readFileSync(targetFile , 'utf8');
-      var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
-
-      assert.equal(routerJsContent, expected);
-    });
-  });
 });

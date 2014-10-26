@@ -1,10 +1,10 @@
 var path     = require('path');
 var fs       = require('fs-extra');
 var template = require('lodash-node/modern/utilities/template');
+var addonRoot = path.join(__filename, '..', '..', '..');
 
 function renderTemplate(name, context) {
-  var root = process.cwd();
-  var templateContent = fs.readFileSync(path.join(root, 'templates', name), 'utf8');
+  var templateContent = fs.readFileSync(path.join(addonRoot, 'templates', name), 'utf8');
   return template(templateContent, context);
 }
 
@@ -18,8 +18,7 @@ function insertInto(file, match, newContent) {
   if (index !== -1) {
     index = index + match.length;
     fileContent =  fileContent.substring(0, index) + newContent + fileContent.substring(index, fileContent.length);
-    fs.writeFileSync(file, fileContent);
-  }
+    fs.writeFileSync(file, fileContent); }
 }
 
 function removeFromFile(file, match) {
@@ -43,8 +42,8 @@ module.exports = {
     var resourceName = options.entity.name;
     var singularResourceName = resourceName;
     var pluralResourceName = resourceName + 's';
-    var root = options.target;
-    var routerFile = path.join(root, 'app', 'router.js');
+    var target = options.target;
+    var routerFile = path.join(target, 'app', 'router.js');
     var resourceRouterContent = renderTemplate('resource-router', { resource: { plural: pluralResourceName, singular: singularResourceName } })
     insertInto(routerFile, 'Router.map(function() {\n', resourceRouterContent);
   },
@@ -53,8 +52,8 @@ module.exports = {
     var resourceName = options.entity.name;
     var singularResourceName = resourceName;
     var pluralResourceName = resourceName + 's';
-    var root = options.target;
-    var routerFile = path.join(root, 'app', 'router.js');
+    var target = options.target;
+    var routerFile = path.join(target, 'app', 'router.js');
     var resourceRouterContent = renderTemplate('resource-router', { resource: { plural: pluralResourceName, singular: singularResourceName } })
     removeFromFile(routerFile, resourceRouterContent);
   },

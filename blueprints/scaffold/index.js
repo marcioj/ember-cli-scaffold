@@ -19,20 +19,22 @@ function insertInto(file, match, newContent) {
   }
 }
 
+function removeFromFile(file, match) {
+  fs.ensureFileSync(file);
+  var fileContent = fs.readFileSync(file, 'utf8');
+  var index = fileContent.indexOf(match);
+  if (index >= 0) {
+    fileContent = fileContent.substring(0, index) + fileContent.substring(index + match.length, fileContent.length);
+    fs.writeFileSync(file, fileContent);
+  }
+}
+
 module.exports = {
   anonymousOptions: [
     'name',
     'attr:type'
   ],
   description: '',
-
-  // locals: function(options) {
-  //   // Return custom template variables here.
-  //   return {
-  //     foo: options.entity.options.foo
-  //   };
-  // }
-
   afterInstall: function(options) {
     // TODO normalize the name
     var resourceName = options.entity.name;
@@ -42,5 +44,15 @@ module.exports = {
     var routerFile = path.join(root, 'app', 'router.js');
     var resourceRouterContent = renderTemplate('resource-router', { resource: { plural: pluralResourceName, singular: singularResourceName } })
     insertInto(routerFile, 'Router.map(function() {\n', resourceRouterContent);
+  },
+  afterUninstall: function(options) {
+    // TODO normalize the name
+    var resourceName = options.entity.name;
+    var singularResourceName = resourceName;
+    var pluralResourceName = resourceName + 's';
+    var root = options.target;
+    var routerFile = path.join(root, 'app', 'router.js');
+    var resourceRouterContent = renderTemplate('resource-router', { resource: { plural: pluralResourceName, singular: singularResourceName } })
+    removeFromFile(routerFile, resourceRouterContent);
   },
 };

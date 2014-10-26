@@ -13,12 +13,13 @@ var lookupPath        = path.join(root, 'blueprints');
 describe('scaffold blueprint', function() {
   var blueprint;
   var options;
+  var entityName;
 
   beforeEach(function() {
     var ui = new MockUI();
     var project = new MockProject();
     options   = {
-      entity: { name: 'user' },
+      entity: { name: null },
       ui: ui,
       project: project,
       target: tmproot,
@@ -31,14 +32,29 @@ describe('scaffold blueprint', function() {
     return rimraf(tmproot);
   });
 
-  it('changes the router.js file', function() {
+  it('add the resource definition to router.js', function() {
+    options.entity.name = 'user';
     var sourceFile = path.join(root, 'tests', 'fixtures', 'empty-router');
     var targetFile = path.join(tmproot, 'app', 'router.js');
     fs.copySync(sourceFile, targetFile);
 
     return blueprint.install(options).then(function() {
       var routerJsContent = fs.readFileSync(targetFile , 'utf8');
-      var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'expected-router'), 'utf8');
+      var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
+
+      assert.equal(routerJsContent, expected);
+    });
+  });
+
+  it('removes the resource definition from router.js', function() {
+    options.entity.name = 'user';
+    var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
+    var targetFile = path.join(tmproot, 'app', 'router.js');
+    fs.copySync(sourceFile, targetFile);
+
+    return blueprint.uninstall(options).then(function() {
+      var routerJsContent = fs.readFileSync(targetFile , 'utf8');
+      var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'empty-router'), 'utf8');
 
       assert.equal(routerJsContent, expected);
     });

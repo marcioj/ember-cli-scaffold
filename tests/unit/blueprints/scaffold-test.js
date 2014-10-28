@@ -87,6 +87,16 @@ describe('scaffold blueprint', function() {
       });
     });
 
+    it('installs the save-model-mixin mixin', function() {
+      options.entity.name = 'whatever';
+
+      return blueprint.install(options).then(function() {
+        var files = walkSync(path.join(tmproot, 'app', 'mixins')).sort();
+
+        assert.deepEqual(files, ['save-model-mixin.js']);
+      });
+    });
+
   });
 
   describe('uninstall', function() {
@@ -130,6 +140,18 @@ describe('scaffold blueprint', function() {
         var files = walkSync(path.join(tmproot, 'app', 'routes')).sort();
 
         assert.deepEqual(files, ['bros/']);
+      });
+    });
+
+    it('uninstalls the save-model-mixin mixin', function() {
+      options.entity.name = 'whatever';
+
+      fs.ensureFileSync(path.join(tmproot, 'app', 'mixins', 'save-model-mixin.js'));
+
+      return blueprint.uninstall(options).then(function() {
+        var files = walkSync(path.join(tmproot, 'app', 'mixins')).sort();
+
+        assert.deepEqual(files, []);
       });
     });
 

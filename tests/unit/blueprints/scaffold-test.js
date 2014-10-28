@@ -126,10 +126,6 @@ describe('scaffold blueprint', function() {
         fs.ensureFileSync(path.join(tmproot, 'app', 'routes', 'bros', file));
       });
 
-      var sourceFile = path.join(root, 'tests', 'fixtures', 'empty-router');
-      var targetFile = path.join(tmproot, 'app', 'router.js');
-      fs.copySync(sourceFile, targetFile);
-
       return blueprint.uninstall(options).then(function() {
         var files = walkSync(path.join(tmproot, 'app', 'routes')).sort();
 

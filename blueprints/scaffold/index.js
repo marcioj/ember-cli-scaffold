@@ -37,6 +37,14 @@ module.exports = {
     'attr:type'
   ],
   description: '',
+  fileMapTokens: function(options) {
+    return {
+      __name__: function(options) {
+        // TODO pluralize properly
+        return options.dasherizedModuleName + 's';
+      }
+    }
+  },
   afterInstall: function(options) {
     // TODO normalize the name
     var resourceName = options.entity.name;

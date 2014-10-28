@@ -7,6 +7,7 @@ var rimraf            = Promise.denodeify(require('rimraf'));
 var assert            = require('assert');
 var path              = require('path');
 var fs                = require('fs-extra');
+var walkSync          = require('walk-sync');
 var tmproot           = path.join(root, 'tmp');
 var lookupPath        = path.join(root, 'blueprints');
 
@@ -76,6 +77,16 @@ describe('scaffold blueprint', function() {
       });
     });
 
+    it('installs the resourcefull routes', function() {
+      options.entity.name = 'bro';
+
+      return blueprint.install(options).then(function() {
+        var files = walkSync(path.join(tmproot, 'app', 'routes')).sort();
+
+        assert.deepEqual(files, ['bros/','bros/edit.js','bros/index.js','bros/new.js']);
+      });
+    });
+
   });
 
   describe('uninstall', function() {
@@ -105,6 +116,24 @@ describe('scaffold blueprint', function() {
         var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
 
         assert.equal(routerJsContent, expected);
+      });
+    });
+
+    it('uninstalls the resourcefull routes', function() {
+      options.entity.name = 'bro';
+
+      ['edit.js','index.js','new.js'].forEach(function(file) {
+        fs.ensureFileSync(path.join(tmproot, 'app', 'routes', 'bros', file));
+      });
+
+      var sourceFile = path.join(root, 'tests', 'fixtures', 'empty-router');
+      var targetFile = path.join(tmproot, 'app', 'router.js');
+      fs.copySync(sourceFile, targetFile);
+
+      return blueprint.uninstall(options).then(function() {
+        var files = walkSync(path.join(tmproot, 'app', 'routes')).sort();
+
+        assert.deepEqual(files, ['bros/']);
       });
     });
 

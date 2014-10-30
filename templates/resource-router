@@ -1,5 +1,5 @@
-  this.resource('<%= resource.plural %>', function() {
+  this.resource('<%= dasherizedModuleNamePlural %>', function() {
     this.route('new');
-    this.route('edit', { path: ':<%= resource.singular %>_id/edit' });
-    this.route('show', { path: ':<%= resource.singular %>_id' });
+    this.route('edit', { path: ':<%= dasherizedModuleName %>_id/edit' });
+    this.route('show', { path: ':<%= dasherizedModuleName %>_id' });
   });

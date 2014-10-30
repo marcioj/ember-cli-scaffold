@@ -76,13 +76,9 @@ module.exports = {
     }
   },
   afterInstall: function(options) {
-    // TODO normalize the name
-    var resourceName = options.entity.name;
-    var singularResourceName = resourceName;
-    var pluralResourceName = resourceName + 's';
     var target = options.target;
     var routerFile = path.join(target, 'app', 'router.js');
-    var resourceRouterContent = renderTemplate('resource-router', { resource: { plural: pluralResourceName, singular: singularResourceName } })
+    var resourceRouterContent = renderTemplate('resource-router', this.locals(options));
     insertInto(routerFile, 'Router.map(function() {\n', resourceRouterContent);
 
     var blueprint = Blueprint.lookup('model', {
@@ -95,13 +91,9 @@ module.exports = {
     return blueprint.install(options);
   },
   afterUninstall: function(options) {
-    // TODO normalize the name
-    var resourceName = options.entity.name;
-    var singularResourceName = resourceName;
-    var pluralResourceName = resourceName + 's';
     var target = options.target;
     var routerFile = path.join(target, 'app', 'router.js');
-    var resourceRouterContent = renderTemplate('resource-router', { resource: { plural: pluralResourceName, singular: singularResourceName } })
+    var resourceRouterContent = renderTemplate('resource-router', this.locals(options));
     removeFromFile(routerFile, resourceRouterContent);
 
     var blueprint = Blueprint.lookup('model', {

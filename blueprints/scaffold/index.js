@@ -1,8 +1,14 @@
-var path      = require('path');
-var fs        = require('fs-extra');
-var template  = require('lodash-node/modern/utilities/template');
-var addonRoot = path.join(__filename, '..', '..', '..');
-var Blueprint = require('ember-cli/lib/models/blueprint');
+var path        = require('path');
+var fs          = require('fs-extra');
+var template    = require('lodash-node/modern/utilities/template');
+var addonRoot   = path.join(__filename, '..', '..', '..');
+var Blueprint   = require('ember-cli/lib/models/blueprint');
+var inflection  = require('inflection');
+var stringUtils = require('ember-cli/lib/utilities/string.js');
+
+function humanize(word) {
+  return stringUtils.capitalize(word.toLowerCase().replace(/_/g, ' '));
+}
 
 function renderTemplate(name, context) {
   var templateContent = fs.readFileSync(path.join(addonRoot, 'templates', name), 'utf8');
@@ -44,6 +50,27 @@ module.exports = {
         // TODO pluralize properly
         return options.dasherizedModuleName + 's';
       }
+    }
+  },
+  locals: function(options) {
+    var name = options.entity.name;
+    var entityOptions = options.entity.options;
+    var dasherizedModuleName = stringUtils.dasherize(name);
+    var dasherizedModuleNamePlural = inflection.pluralize(dasherizedModuleName);
+    var camelizedModuleName = stringUtils.camelize(name);
+    var attrs = [];
+
+    for(var name in entityOptions) {
+      var attrName = stringUtils.camelize(name);
+      var label = humanize(name);
+      attrs.push({ name: attrName, label: label });
+    }
+
+    return {
+      attrs: attrs,
+      dasherizedModuleName: dasherizedModuleName,
+      dasherizedModuleNamePlural: dasherizedModuleNamePlural,
+      camelizedModuleName: camelizedModuleName
     }
   },
   afterInstall: function(options) {

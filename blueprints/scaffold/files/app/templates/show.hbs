@@ -1,0 +1,11 @@
+<p>
+  {{link-to "<%= camelizedModuleName %> list" "<%= dasherizedModuleNamePlural %>.index" }}
+</p>
+
+<h1><%= camelizedModuleName %> show</h1>
+<% attrs.forEach(function(attr) { %>
+<p>
+  <strong><%= attr.label %>:</strong>
+  {{<%= attr.name %>}}
+</p>
+<% }); %>

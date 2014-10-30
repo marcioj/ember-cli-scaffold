@@ -107,6 +107,17 @@ describe('scaffold blueprint', function() {
       });
     });
 
+    it('installs the teplates', function() {
+      options.entity.name = 'user';
+      options.entity.options = { first_name: 'string', last_name: 'string' };
+
+      return blueprint.install(options).then(function() {
+        var files = walkSync(path.join(tmproot, 'app', 'templates')).sort();
+
+        assert.deepEqual(files, ['show.hbs']);
+      });
+    });
+
   });
 
   describe('uninstall', function() {
@@ -172,6 +183,19 @@ describe('scaffold blueprint', function() {
 
       return blueprint.uninstall(options).then(function() {
         var files = walkSync(path.join(tmproot, 'app', 'models')).sort();
+
+        assert.deepEqual(files, []);
+      });
+    });
+
+    it('uninstalls the templates', function() {
+      options.entity.name = 'user';
+      options.entity.options = { first_name: 'string', last_name: 'string' };
+
+      fs.ensureFileSync(path.join(tmproot, 'app', 'templates', 'show.hbs'));
+
+      return blueprint.uninstall(options).then(function() {
+        var files = walkSync(path.join(tmproot, 'app', 'templates')).sort();
 
         assert.deepEqual(files, []);
       });

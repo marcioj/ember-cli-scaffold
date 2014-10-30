@@ -1,8 +1,8 @@
 <p>
-  {{link-to "<%= classifiedModuleName %> list" "<%= dasherizedModuleNamePlural %>.index" }}
+  {{link-to "<%= humanizedModuleName %> list" "<%= dasherizedModuleNamePlural %>.index" }}
 </p>
 
-<h1><%= classifiedModuleName %> show</h1>
+<h1><%= humanizedModuleName %> show</h1>
 <% attrs.forEach(function(attr) { %>
 <p>
   <strong><%= attr.label %>:</strong>

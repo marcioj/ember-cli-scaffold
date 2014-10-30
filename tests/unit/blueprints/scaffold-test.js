@@ -117,30 +117,30 @@ describe('scaffold blueprint', function() {
       return blueprint.install(options).then(function() {
         var files = walkSync(path.join(tmproot, 'app', 'templates')).sort();
 
-        assert.deepEqual(files, ['_form.hbs', 'edit.hbs', 'index.hbs', 'new.hbs', 'show.hbs']);
+        assert.deepEqual(files, ['users/', 'users/_form.hbs', 'users/edit.hbs', 'users/index.hbs', 'users/new.hbs', 'users/show.hbs']);
 
         var expectedShowTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'show_template'), 'utf8');
-        var showTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'show.hbs'), 'utf8');
+        var showTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'users', 'show.hbs'), 'utf8');
 
         assert.equal(showTemplate, expectedShowTemplate);
 
         var expectedNewTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'new_template'), 'utf8');
-        var newTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'new.hbs'), 'utf8');
+        var newTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'users', 'new.hbs'), 'utf8');
 
         assert.equal(newTemplate, expectedNewTemplate);
 
         var expectedIndexTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'index_template'), 'utf8');
-        var indexTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'index.hbs'), 'utf8');
+        var indexTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'users', 'index.hbs'), 'utf8');
 
         assert.equal(indexTemplate, expectedIndexTemplate);
 
         var expectedEditTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'edit_template'), 'utf8');
-        var editTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'edit.hbs'), 'utf8');
+        var editTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'users', 'edit.hbs'), 'utf8');
 
         assert.equal(editTemplate, expectedEditTemplate);
 
         var expectedFormTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'form_template'), 'utf8');
-        var formTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', '_form.hbs'), 'utf8');
+        var formTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'users', '_form.hbs'), 'utf8');
 
         assert.equal(formTemplate, expectedFormTemplate);
       });
@@ -220,12 +220,14 @@ describe('scaffold blueprint', function() {
       options.entity.name = 'user';
       options.entity.options = { first_name: 'string', last_name: 'string' };
 
-      fs.ensureFileSync(path.join(tmproot, 'app', 'templates', 'show.hbs'));
+      ['_form.hbs', 'new.hbs', 'index.hbs', 'edit.hbs', 'show.hbs'].forEach(function(template) {
+        fs.ensureFileSync(path.join(tmproot, 'app', 'templates', 'users', template));
+      });
 
       return blueprint.uninstall(options).then(function() {
         var files = walkSync(path.join(tmproot, 'app', 'templates')).sort();
 
-        assert.deepEqual(files, []);
+        assert.deepEqual(files, ['users/']);
       });
     });
 

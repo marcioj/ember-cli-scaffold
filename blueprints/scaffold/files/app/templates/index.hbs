@@ -26,13 +26,13 @@
           {{<%= camelizedModuleName %>.<%= attr.name %>}}
         </td><% }); %>
         <td>
-          {{link-to "Edit" "users.edit" user}}
+          {{link-to "Edit" "<%= dasherizedModuleNamePlural %>.edit" <%= camelizedModuleName %>}}
         </td>
         <td>
-          {{link-to "Show" "users.show" user}}
+          {{link-to "Show" "<%= dasherizedModuleNamePlural %>.show" <%= camelizedModuleName %>}}
         </td>
         <td>
-          <a href="#" {{action "remove" user}}>Remove</a>
+          <a href="#" {{action "remove" <%= camelizedModuleName %>}}>Remove</a>
         </td>
       </tr>
     {{/each}}

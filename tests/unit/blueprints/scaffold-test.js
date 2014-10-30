@@ -92,8 +92,11 @@ describe('scaffold blueprint', function() {
 
       return blueprint.install(options).then(function() {
         var files = walkSync(path.join(tmproot, 'app', 'mixins')).sort();
+        var actualContent = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'save-model-mixin'), 'utf8');
+        var expectedContent = fs.readFileSync(path.join(tmproot, 'app', 'mixins', 'save-model-mixin.js'), 'utf8');
 
         assert.deepEqual(files, ['save-model-mixin.js']);
+        assert.deepEqual(actualContent, expectedContent);
       });
     });
 

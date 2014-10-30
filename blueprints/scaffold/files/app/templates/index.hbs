@@ -1,0 +1,42 @@
+<h1><%= humanizedModuleNamePlural %> list</h1>
+
+<p>
+  {{link-to "New <%= humanizedModuleName %>" "<%= dasherizedModuleNamePlural %>.new" }}
+</p>
+
+{{#if controller.length}}
+  <table>
+    <tr><% attrs.forEach(function(attr) { %>
+      <th>
+        <%= attr.label %>
+      </th><% }); %>
+      <th>
+        Edit
+      </th>
+      <th>
+        Show
+      </th>
+      <th>
+        Remove
+      </th>
+    </tr>
+    {{#each <%= camelizedModuleName %> in controller}}
+      <tr><% attrs.forEach(function(attr) { %>
+        <td>
+          {{<%= camelizedModuleName %>.<%= attr.name %>}}
+        </td><% }); %>
+        <td>
+          {{link-to "Edit" "users.edit" user}}
+        </td>
+        <td>
+          {{link-to "Show" "users.show" user}}
+        </td>
+        <td>
+          <a href="#" {{action "remove" user}}>Remove</a>
+        </td>
+      </tr>
+    {{/each}}
+  </table>
+{{else}}
+  No <%= humanizedModuleNamePlural %> found
+{{/if}}

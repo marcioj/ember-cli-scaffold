@@ -117,7 +117,7 @@ describe('scaffold blueprint', function() {
       return blueprint.install(options).then(function() {
         var files = walkSync(path.join(tmproot, 'app', 'templates')).sort();
 
-        assert.deepEqual(files, ['new.hbs', 'show.hbs']);
+        assert.deepEqual(files, ['index.hbs', 'new.hbs', 'show.hbs']);
 
         var expectedShowTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'show_template'), 'utf8');
         var showTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'show.hbs'), 'utf8');
@@ -128,6 +128,11 @@ describe('scaffold blueprint', function() {
         var newTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'new.hbs'), 'utf8');
 
         assert.equal(newTemplate, expectedNewTemplate);
+
+        var expectedIndexTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'index_template'), 'utf8');
+        var indexTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'index.hbs'), 'utf8');
+
+        assert.equal(indexTemplate, expectedIndexTemplate);
       });
     });
 

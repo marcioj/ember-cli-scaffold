@@ -1,0 +1,48 @@
+<h1>Users list</h1>
+
+<p>
+  {{link-to "New User" "users.new" }}
+</p>
+
+{{#if controller.length}}
+  <table>
+    <tr>
+      <th>
+        First name
+      </th>
+      <th>
+        Last name
+      </th>
+      <th>
+        Edit
+      </th>
+      <th>
+        Show
+      </th>
+      <th>
+        Remove
+      </th>
+    </tr>
+    {{#each user in controller}}
+      <tr>
+        <td>
+          {{user.firstName}}
+        </td>
+        <td>
+          {{user.lastName}}
+        </td>
+        <td>
+          {{link-to "Edit" "users.edit" user}}
+        </td>
+        <td>
+          {{link-to "Show" "users.show" user}}
+        </td>
+        <td>
+          <a href="#" {{action "remove" user}}>Remove</a>
+        </td>
+      </tr>
+    {{/each}}
+  </table>
+{{else}}
+  No Users found
+{{/if}}

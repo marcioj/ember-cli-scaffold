@@ -1,0 +1,6 @@
+<p>
+  {{link-to "User list" "users.index" }}
+</p>
+
+<h1>New User</h1>
+{{partial "users/form"}}

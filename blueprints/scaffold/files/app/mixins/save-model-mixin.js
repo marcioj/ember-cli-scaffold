@@ -5,8 +5,7 @@ export default Ember.Mixin.create({
     save: function() {
       var route = this;
       this.currentModel.save().then(function() {
-        // TODO pluralize properly
-        route.transitionTo('<%= dasherizedModuleName %>s.index');
+        route.transitionTo('<%= dasherizedModuleNamePlural %>.index');
       }, function() {
         console.log('Failed to save model user');
       });

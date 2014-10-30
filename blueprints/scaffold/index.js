@@ -47,8 +47,8 @@ module.exports = {
   fileMapTokens: function(options) {
     return {
       __name__: function(options) {
-        // TODO pluralize properly
-        return options.dasherizedModuleName + 's';
+        // TODO use locals instead
+        return inflection.pluralize(options.dasherizedModuleName);
       }
     }
   },

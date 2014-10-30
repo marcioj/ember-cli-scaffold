@@ -97,6 +97,16 @@ describe('scaffold blueprint', function() {
       });
     });
 
+    it('installs the model', function() {
+      options.entity.name = 'post';
+
+      return blueprint.install(options).then(function() {
+        var files = walkSync(path.join(tmproot, 'app', 'models')).sort();
+
+        assert.deepEqual(files, ['post.js']);
+      });
+    });
+
   });
 
   describe('uninstall', function() {
@@ -150,6 +160,18 @@ describe('scaffold blueprint', function() {
 
       return blueprint.uninstall(options).then(function() {
         var files = walkSync(path.join(tmproot, 'app', 'mixins')).sort();
+
+        assert.deepEqual(files, []);
+      });
+    });
+
+    it('uninstalls the model', function() {
+      options.entity.name = 'user';
+
+      fs.ensureFileSync(path.join(tmproot, 'app', 'models', 'user.js'));
+
+      return blueprint.uninstall(options).then(function() {
+        var files = walkSync(path.join(tmproot, 'app', 'models')).sort();
 
         assert.deepEqual(files, []);
       });

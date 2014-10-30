@@ -1,7 +1,8 @@
-var path     = require('path');
-var fs       = require('fs-extra');
-var template = require('lodash-node/modern/utilities/template');
+var path      = require('path');
+var fs        = require('fs-extra');
+var template  = require('lodash-node/modern/utilities/template');
 var addonRoot = path.join(__filename, '..', '..', '..');
+var Blueprint = require('ember-cli/lib/models/blueprint');
 
 function renderTemplate(name, context) {
   var templateContent = fs.readFileSync(path.join(addonRoot, 'templates', name), 'utf8');
@@ -54,6 +55,15 @@ module.exports = {
     var routerFile = path.join(target, 'app', 'router.js');
     var resourceRouterContent = renderTemplate('resource-router', { resource: { plural: pluralResourceName, singular: singularResourceName } })
     insertInto(routerFile, 'Router.map(function() {\n', resourceRouterContent);
+
+    var blueprint = Blueprint.lookup('model', {
+      ui: this.ui,
+      analyctics: this.analyctics,
+      project: this.project,
+      ignoreMissing: true
+    });
+
+    return blueprint.install(options);
   },
   afterUninstall: function(options) {
     // TODO normalize the name
@@ -64,5 +74,14 @@ module.exports = {
     var routerFile = path.join(target, 'app', 'router.js');
     var resourceRouterContent = renderTemplate('resource-router', { resource: { plural: pluralResourceName, singular: singularResourceName } })
     removeFromFile(routerFile, resourceRouterContent);
+
+    var blueprint = Blueprint.lookup('model', {
+      ui: this.ui,
+      analyctics: this.analyctics,
+      project: this.project,
+      ignoreMissing: true
+    });
+
+    return blueprint.uninstall(options);
   },
 };

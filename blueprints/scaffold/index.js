@@ -55,6 +55,7 @@ module.exports = {
   locals: function(options) {
     var name = options.entity.name;
     var entityOptions = options.entity.options;
+    var classifiedModuleName = stringUtils.classify(name);
     var dasherizedModuleName = stringUtils.dasherize(name);
     var dasherizedModuleNamePlural = inflection.pluralize(dasherizedModuleName);
     var camelizedModuleName = stringUtils.camelize(name);
@@ -68,6 +69,7 @@ module.exports = {
 
     return {
       attrs: attrs,
+      classifiedModuleName: classifiedModuleName,
       dasherizedModuleName: dasherizedModuleName,
       dasherizedModuleNamePlural: dasherizedModuleNamePlural,
       camelizedModuleName: camelizedModuleName

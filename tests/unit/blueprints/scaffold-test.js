@@ -115,6 +115,11 @@ describe('scaffold blueprint', function() {
         var files = walkSync(path.join(tmproot, 'app', 'templates')).sort();
 
         assert.deepEqual(files, ['show.hbs']);
+
+        var expectedShowTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'show_template'), 'utf8');
+        var showTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'show.hbs'), 'utf8');
+
+        assert.equal(showTemplate, expectedShowTemplate);
       });
     });
 

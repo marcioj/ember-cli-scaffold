@@ -1,0 +1,16 @@
+<p>
+  {{link-to "User list" "users.index" }}
+</p>
+
+<h1>User show</h1>
+
+<p>
+  <strong>First name:</strong>
+  {{firstName}}
+</p>
+
+<p>
+  <strong>Last name:</strong>
+  {{lastName}}
+</p>
+

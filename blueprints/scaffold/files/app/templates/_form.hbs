@@ -1,0 +1,11 @@
+<form {{action "save" on="submit"}}><% attrs.forEach(function(attr) { %>
+  <div>
+    <label>
+      <%= attr.label %>
+      {{input type="text" value=<%= attr.name %>}}
+    </label>
+  </div><% }); %>
+  <div>
+    <input type="submit" value="Save">
+  </div>
+</form>

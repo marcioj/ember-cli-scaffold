@@ -6,11 +6,11 @@
 
 ## Installation
 
-* `npm install --save-dev ember-cli-scaffold`
+In your ember-cli app, do `npm install --save-dev ember-cli-scaffold`
 
 ## Running
 
-* `ember generate scaffold user first_name:string last_name:string age:number`
+`ember generate scaffold user first_name:string last_name:string age:number`
 
 Will generate the following files:
 
@@ -27,7 +27,7 @@ Will generate the following files:
 
 ## Running Tests
 
-* `npm test`
+`npm test`
 
 ## Contributing
 

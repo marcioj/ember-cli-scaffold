@@ -8,7 +8,7 @@
   "scripts": {
     "test": "mocha --reporter spec tests/**/*-test.js"
   },
-  "repository": "https://github.com/stefanpenner/ember-cli",
+  "repository": "https://github.com/marcioj/ember-cli-scaffold",
   "engines": {
     "node": ">= 0.10.0"
   },

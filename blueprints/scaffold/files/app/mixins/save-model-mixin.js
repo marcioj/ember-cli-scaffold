@@ -5,9 +5,9 @@ export default Ember.Mixin.create({
     save: function() {
       var route = this;
       this.currentModel.save().then(function() {
-        route.transitionTo('<%= dasherizedModuleNamePlural %>.index');
+        route.transitionTo(route.routeName.split('.')[0]);
       }, function() {
-        console.log('Failed to save model user');
+        console.log('Failed to save the model');
       });
     }
   },

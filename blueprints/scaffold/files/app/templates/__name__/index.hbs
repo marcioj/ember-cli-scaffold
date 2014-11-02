@@ -6,31 +6,37 @@
 
 {{#if controller.length}}
   <table>
-    <tr><% attrs.forEach(function(attr) { %>
-      <th>
-        <%= attr.label %>
-      </th><% }); %>
-      <th colspan="3">
-        Actions
-      </th>
-    </tr>
-    {{#each <%= camelizedModuleName %> in controller}}
+    <thead>
       <tr><% attrs.forEach(function(attr) { %>
-        <td>
-          {{<%= camelizedModuleName %>.<%= attr.name %>}}
-        </td><% }); %>
-        <td>
-          {{link-to "Edit" "<%= dasherizedModuleNamePlural %>.edit" <%= camelizedModuleName %>}}
-        </td>
-        <td>
-          {{link-to "Show" "<%= dasherizedModuleNamePlural %>.show" <%= camelizedModuleName %>}}
-        </td>
-        <td>
-          <a href="#" {{action "remove" <%= camelizedModuleName %>}}>Remove</a>
-        </td>
+        <th>
+          <%= attr.label %>
+        </th><% }); %>
+        <th colspan="3">
+          Actions
+        </th>
       </tr>
-    {{/each}}
+    </thead>
+    <tbody>
+      {{#each <%= camelizedModuleName %> in controller}}
+        <tr><% attrs.forEach(function(attr) { %>
+          <td>
+            {{<%= camelizedModuleName %>.<%= attr.name %>}}
+          </td><% }); %>
+          <td>
+            {{link-to "Edit" "<%= dasherizedModuleNamePlural %>.edit" <%= camelizedModuleName %>}}
+          </td>
+          <td>
+            {{link-to "Show" "<%= dasherizedModuleNamePlural %>.show" <%= camelizedModuleName %>}}
+          </td>
+          <td>
+            <a href="#" {{action "remove" <%= camelizedModuleName %>}}>Remove</a>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
   </table>
 {{else}}
-  No <%= humanizedModuleNamePlural %> found
+  <p id="blankslate">
+    No <%= humanizedModuleNamePlural %> found
+  </p>
 {{/if}}

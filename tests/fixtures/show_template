@@ -6,11 +6,11 @@
 
 <p>
   <strong>First name:</strong>
-  {{firstName}}
+  <span>{{firstName}}</span>
 </p>
 
 <p>
   <strong>Last name:</strong>
-  {{lastName}}
+  <span>{{lastName}}</span>
 </p>
 

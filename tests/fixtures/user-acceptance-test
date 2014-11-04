@@ -1,0 +1,28 @@
+import Ember from 'ember';
+import startApp from '../helpers/start-app';
+
+var App;
+
+function defineFixturesFor(name, fixtures) {
+  var modelClass = App.__container__.lookupFactory('model:' + name);
+  modelClass.FIXTURES = fixtures;
+}
+
+module('Acceptance: User', {
+  setup: function() {
+    App = startApp();
+    defineFixturesFor('user', []);
+  },
+  teardown: function() {
+    Ember.run(App, 'destroy');
+  }
+});
+
+test('visiting /users without data', function() {
+  visit('/users');
+
+  andThen(function() {
+    equal(currentPath(), 'users.index');
+    equal(find('#blankslate').text().trim(), 'No Users found');
+  });
+});

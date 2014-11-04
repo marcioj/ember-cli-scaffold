@@ -110,7 +110,7 @@ describe('scaffold blueprint', function() {
       });
     });
 
-    it('installs the teplates', function() {
+    it('installs the templates', function() {
       options.entity.name = 'user';
       options.entity.options = { first_name: 'string', last_name: 'string' };
 
@@ -143,6 +143,11 @@ describe('scaffold blueprint', function() {
         var formTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'users', '-form.hbs'), 'utf8');
 
         assert.equal(formTemplate, expectedFormTemplate);
+
+        var expectedAcceptanceTest = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'user-acceptance-test'), 'utf8');
+        var acceptanceTest = fs.readFileSync(path.join(tmproot, 'tests', 'acceptance', 'users-test.js'), 'utf8');
+
+        assert.equal(acceptanceTest, expectedAcceptanceTest);
       });
     });
 

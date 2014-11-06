@@ -8,6 +8,8 @@
 
 In your ember-cli app, do `npm install --save-dev ember-cli-scaffold`
 
+Since this addon doesn't install any adapter, the easy way to persist your data is installing the [ember-localstorage-adapter](https://github.com/kurko/ember-localstorage-adapter)
+
 ## Running
 
 `ember generate scaffold user first_name:string last_name:string age:number`

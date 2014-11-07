@@ -26,3 +26,14 @@ test('visiting /users without data', function() {
     equal(find('#blankslate').text().trim(), 'No Users found');
   });
 });
+
+test('visiting /users with data', function() {
+  defineFixturesFor('user', [{ id: 1, firstName: 'MyString', lastName: 'MyString' }]);
+  visit('/users');
+
+  andThen(function() {
+    equal(currentPath(), 'users.index');
+    equal(find('#blankslate').length, 0);
+    equal(find('table tbody tr').length, 1);
+  });
+});

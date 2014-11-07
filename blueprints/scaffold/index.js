@@ -38,6 +38,24 @@ function removeFromFile(file, match) {
   }
 }
 
+function sampleValue(type) {
+  switch (type) {
+  case 'array':
+    return '[]';
+  case 'boolean':
+    return 'false';
+  case 'date':
+    return 'new Date()';
+  case 'number':
+    return '42';
+  case 'object':
+    return '{}';
+  case 'string':
+  default:
+    return "'MyString'";
+  }
+}
+
 module.exports = {
   anonymousOptions: [
     'name',
@@ -62,14 +80,22 @@ module.exports = {
     var dasherizedModuleNamePlural = inflection.pluralize(dasherizedModuleName);
     var camelizedModuleName = stringUtils.camelize(name);
     var attrs = [];
+    var sampleData = [];
+
+    sampleData.push(' id: 1');
 
     for(var name in entityOptions) {
+      var type = entityOptions[name] || '';
+      var dasherizedType = stringUtils.dasherize(type);
       var attrName = stringUtils.camelize(name);
       var label = humanize(name);
       attrs.push({ name: attrName, label: label });
+      sampleData.push(attrName + ': ' + sampleValue(dasherizedType));
     }
+    sampleData = '{' + sampleData.join(', ') + ' }';
 
     return {
+      sampleData: sampleData,
       attrs: attrs,
       humanizedModuleName: humanizedModuleName,
       humanizedModuleNamePlural: humanizedModuleNamePlural,

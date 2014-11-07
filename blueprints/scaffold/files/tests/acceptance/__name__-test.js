@@ -26,3 +26,14 @@ test('visiting /<%= dasherizedModuleNamePlural %> without data', function() {
     equal(find('#blankslate').text().trim(), 'No <%= humanizedModuleNamePlural %> found');
   });
 });
+
+test('visiting /<%= dasherizedModuleNamePlural %> with data', function() {
+  defineFixturesFor('user', [<%= sampleData %>]);
+  visit('/<%= dasherizedModuleNamePlural %>');
+
+  andThen(function() {
+    equal(currentPath(), '<%= dasherizedModuleNamePlural %>.index');
+    equal(find('#blankslate').length, 0);
+    equal(find('table tbody tr').length, 1);
+  });
+});

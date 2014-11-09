@@ -37,3 +37,22 @@ test('visiting /users with data', function() {
     equal(find('table tbody tr').length, 1);
   });
 });
+
+test('create a new user', function() {
+  visit('/users');
+  click('a:contains(New User)');
+
+  andThen(function() {
+    equal(currentPath(), 'users.new');
+
+    fillIn('label:contains(First name) input', 'MyString');
+    fillIn('label:contains(Last name) input', 'MyString');
+
+    click('input:submit');
+  });
+
+  andThen(function() {
+    equal(find('#blankslate').length, 0);
+    equal(find('table tbody tr').length, 1);
+  });
+});

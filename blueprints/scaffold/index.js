@@ -89,7 +89,7 @@ module.exports = {
       var dasherizedType = stringUtils.dasherize(type);
       var attrName = stringUtils.camelize(name);
       var label = humanize(name);
-      attrs.push({ name: attrName, label: label });
+      attrs.push({ name: attrName, label: label, sampleValue: sampleValue(dasherizedType) });
       sampleData.push(attrName + ': ' + sampleValue(dasherizedType));
     }
     sampleData = '{' + sampleData.join(', ') + ' }';

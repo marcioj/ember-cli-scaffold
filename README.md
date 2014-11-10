@@ -20,7 +20,7 @@ Will generate the following files:
 - app/routes/users/edit.js
 - app/routes/users/index.js
 - app/routes/users/new.js
-- app/templates/users/_form.hbs
+- app/templates/users/-form.hbs
 - app/templates/users/edit.hbs
 - app/templates/users/index.hbs
 - app/templates/users/new.hbs
@@ -34,7 +34,7 @@ Will generate the following files:
 ## TODO
 
 - [x] Generate basic scaffold
-- [ ] Improve templates to show a basic flash message, and display DS.Errors in the _form.hbs
+- [ ] Improve templates to show a basic flash message, and display DS.Errors in the -form.hbs
 - [ ] Generate acceptance tests
 - [ ] Supports pod structure
 - [ ] Refactory sync api's to async

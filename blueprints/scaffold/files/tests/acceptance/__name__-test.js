@@ -55,3 +55,22 @@ test('create a new <%= dasherizedModuleName %>', function() {
     equal(find('table tbody tr').length, 1);
   });
 });
+
+test('update an existing <%= dasherizedModuleName %>', function() {
+  defineFixturesFor('<%= dasherizedModuleName %>', [{ id: 1 }]);
+  visit('/<%= dasherizedModuleNamePlural %>');
+  click('a:contains(Edit)');
+
+  andThen(function() {
+    equal(currentPath(), '<%= dasherizedModuleNamePlural %>.edit');
+<% attrs.forEach(function(attr) { %>
+    fillIn('label:contains(<%= attr.label %>) input', <%= attr.sampleValue %>);<% }); %>
+
+    click('input:submit');
+  });
+
+  andThen(function() {
+    equal(find('#blankslate').length, 0);
+    equal(find('table tbody tr').length, 1);
+  });
+});

@@ -56,3 +56,23 @@ test('create a new user', function() {
     equal(find('table tbody tr').length, 1);
   });
 });
+
+test('update an existing user', function() {
+  defineFixturesFor('user', [{ id: 1 }]);
+  visit('/users');
+  click('a:contains(Edit)');
+
+  andThen(function() {
+    equal(currentPath(), 'users.edit');
+
+    fillIn('label:contains(First name) input', 'MyString');
+    fillIn('label:contains(Last name) input', 'MyString');
+
+    click('input:submit');
+  });
+
+  andThen(function() {
+    equal(find('#blankslate').length, 0);
+    equal(find('table tbody tr').length, 1);
+  });
+});

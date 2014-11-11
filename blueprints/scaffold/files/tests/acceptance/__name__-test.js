@@ -2,6 +2,8 @@ import Ember from 'ember';
 import startApp from '../helpers/start-app';
 
 var App;
+var originalConfirm;
+var confirmCalledWith;
 
 function defineFixturesFor(name, fixtures) {
   var modelClass = App.__container__.lookupFactory('model:' + name);
@@ -12,9 +14,16 @@ module('Acceptance: <%= classifiedModuleName %>', {
   setup: function() {
     App = startApp();
     defineFixturesFor('<%= dasherizedModuleName %>', []);
+    originalConfirm = window.confirm;
+    window.confirm = function() {
+      confirmCalledWith = [].slice.call(arguments);
+      return true;
+    };
   },
   teardown: function() {
     Ember.run(App, 'destroy');
+    window.confirm = originalConfirm;
+    confirmCalledWith = null;
   }
 });
 
@@ -84,5 +93,17 @@ test('show an existing <%= dasherizedModuleName %>', function() {
     equal(currentPath(), '<%= dasherizedModuleNamePlural %>.show');
 <% attrs.forEach(function(attr) { %>
     equal(find('p strong:contains(<%= attr.label %>:)').next().text(), <%= attr.sampleValue %>);<% }); %>
+  });
+});
+
+test('delete a <%= dasherizedModuleName %>', function() {
+  defineFixturesFor('<%= dasherizedModuleName %>', [<%= sampleData %>]);
+  visit('/<%= dasherizedModuleNamePlural %>');
+  click('a:contains(Remove)');
+
+  andThen(function() {
+    equal(currentPath(), '<%= dasherizedModuleNamePlural %>.index');
+    deepEqual(confirmCalledWith, ['Are you sure?']);
+    equal(find('#blankslate').length, 1);
   });
 });

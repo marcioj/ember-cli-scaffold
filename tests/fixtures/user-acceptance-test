@@ -2,6 +2,8 @@ import Ember from 'ember';
 import startApp from '../helpers/start-app';
 
 var App;
+var originalConfirm;
+var confirmCalledWith;
 
 function defineFixturesFor(name, fixtures) {
   var modelClass = App.__container__.lookupFactory('model:' + name);
@@ -12,9 +14,16 @@ module('Acceptance: User', {
   setup: function() {
     App = startApp();
     defineFixturesFor('user', []);
+    originalConfirm = window.confirm;
+    window.confirm = function() {
+      confirmCalledWith = [].slice.call(arguments);
+      return true;
+    };
   },
   teardown: function() {
     Ember.run(App, 'destroy');
+    window.confirm = originalConfirm;
+    confirmCalledWith = null;
   }
 });
 
@@ -87,5 +96,17 @@ test('show an existing user', function() {
 
     equal(find('p strong:contains(First name:)').next().text(), 'MyString');
     equal(find('p strong:contains(Last name:)').next().text(), 'MyString');
+  });
+});
+
+test('delete a user', function() {
+  defineFixturesFor('user', [{ id: 1, firstName: 'MyString', lastName: 'MyString' }]);
+  visit('/users');
+  click('a:contains(Remove)');
+
+  andThen(function() {
+    equal(currentPath(), 'users.index');
+    deepEqual(confirmCalledWith, ['Are you sure?']);
+    equal(find('#blankslate').length, 1);
   });
 });

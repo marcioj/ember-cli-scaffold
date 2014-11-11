@@ -35,7 +35,7 @@ Will generate the following files:
 
 - [x] Generate basic scaffold
 - [ ] Improve templates to show a basic flash message, and display DS.Errors in the -form.hbs
-- [ ] Generate acceptance tests
+- [x] Generate acceptance tests
 - [ ] Supports pod structure
 - [ ] Refactory sync api's to async
 

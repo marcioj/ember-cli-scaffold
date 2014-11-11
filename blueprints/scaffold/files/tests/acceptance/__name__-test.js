@@ -74,3 +74,15 @@ test('update an existing <%= dasherizedModuleName %>', function() {
     equal(find('table tbody tr').length, 1);
   });
 });
+
+test('show an existing <%= dasherizedModuleName %>', function() {
+  defineFixturesFor('<%= dasherizedModuleName %>', [<%= sampleData %>]);
+  visit('/users');
+  click('a:contains(Show)');
+
+  andThen(function() {
+    equal(currentPath(), '<%= dasherizedModuleNamePlural %>.show');
+<% attrs.forEach(function(attr) { %>
+    equal(find('p strong:contains(<%= attr.label %>:)').next().text(), <%= attr.sampleValue %>);<% }); %>
+  });
+});

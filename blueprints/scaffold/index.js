@@ -1,41 +1,14 @@
 var path        = require('path');
 var fs          = require('fs-extra');
 var template    = require('lodash-node/modern/utilities/template');
+var assign    = require('lodash-node/compat/objects/assign');
 var addonRoot   = path.join(__filename, '..', '..', '..');
-var Blueprint   = require('ember-cli/lib/models/blueprint');
 var inflection  = require('inflection');
 var stringUtils = require('ember-cli/lib/utilities/string.js');
-
-function humanize(word) {
-  return stringUtils.capitalize(word.toLowerCase().replace(/_/g, ' '));
-}
 
 function renderTemplate(name, context) {
   var templateContent = fs.readFileSync(path.join(addonRoot, 'templates', name), 'utf8');
   return template(templateContent, context);
-}
-
-function insertInto(file, match, newContent) {
-  fs.ensureFileSync(file);
-  var fileContent = fs.readFileSync(file, 'utf8');
-  if (fileContent.indexOf(newContent) !== -1) {
-    return;
-  }
-  var index = fileContent.indexOf(match);
-  if (index !== -1) {
-    index = index + match.length;
-    fileContent =  fileContent.substring(0, index) + newContent + fileContent.substring(index, fileContent.length);
-    fs.writeFileSync(file, fileContent); }
-}
-
-function removeFromFile(file, match) {
-  fs.ensureFileSync(file);
-  var fileContent = fs.readFileSync(file, 'utf8');
-  var index = fileContent.indexOf(match);
-  if (index >= 0) {
-    fileContent = fileContent.substring(0, index) + fileContent.substring(index + match.length, fileContent.length);
-    fs.writeFileSync(file, fileContent);
-  }
 }
 
 function sampleValue(type) {
@@ -56,7 +29,7 @@ function sampleValue(type) {
   }
 }
 
-module.exports = {
+var blueprint = {
   anonymousOptions: [
     'name',
     'attr:type'
@@ -73,7 +46,7 @@ module.exports = {
   locals: function(options) {
     var name = options.entity.name;
     var entityOptions = options.entity.options;
-    var humanizedModuleName = humanize(name);
+    var humanizedModuleName = inflection.humanize(name);
     var humanizedModuleNamePlural = inflection.pluralize(humanizedModuleName);
     var classifiedModuleName = stringUtils.classify(name);
     var dasherizedModuleName = stringUtils.dasherize(name);
@@ -88,7 +61,7 @@ module.exports = {
       var type = entityOptions[name] || '';
       var dasherizedType = stringUtils.dasherize(type);
       var attrName = stringUtils.camelize(name);
-      var label = humanize(name);
+      var label = inflection.humanize(name);
       attrs.push({ name: attrName, label: label, sampleValue: sampleValue(dasherizedType) });
       sampleData.push(attrName + ': ' + sampleValue(dasherizedType));
     }
@@ -109,30 +82,20 @@ module.exports = {
     var target = options.target;
     var routerFile = path.join(target, 'app', 'router.js');
     var resourceRouterContent = renderTemplate('resource-router', this.locals(options));
-    insertInto(routerFile, 'Router.map(function() {\n', resourceRouterContent);
+    this.insertInto(routerFile, 'Router.map(function() {\n', resourceRouterContent);
 
-    var blueprint = Blueprint.lookup('model', {
-      ui: this.ui,
-      analyctics: this.analyctics,
-      project: this.project,
-      ignoreMissing: true
-    });
-
-    return blueprint.install(options);
+    return this.invoke('model');
   },
   afterUninstall: function(options) {
     var target = options.target;
     var routerFile = path.join(target, 'app', 'router.js');
     var resourceRouterContent = renderTemplate('resource-router', this.locals(options));
-    removeFromFile(routerFile, resourceRouterContent);
+    this.removeFromFile(routerFile, resourceRouterContent);
 
-    var blueprint = Blueprint.lookup('model', {
-      ui: this.ui,
-      analyctics: this.analyctics,
-      project: this.project,
-      ignoreMissing: true
-    });
-
-    return blueprint.uninstall(options);
+    return this.invoke('model');
   },
 };
+
+assign(blueprint, require('../../lib/blueprint/ext'))
+
+module.exports = blueprint;

@@ -19,6 +19,8 @@ describe('scaffold blueprint', function() {
   beforeEach(function() {
     var ui = new MockUI();
     var project = new MockProject();
+    project.root = tmproot;
+
     options   = {
       entity: { name: null },
       ui: ui,

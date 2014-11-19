@@ -1,33 +1,10 @@
-var path        = require('path');
-var fs          = require('fs-extra');
-var template    = require('lodash-node/modern/utilities/template');
-var assign    = require('lodash-node/compat/objects/assign');
-var addonRoot   = path.join(__filename, '..', '..', '..');
-var inflection  = require('inflection');
-var stringUtils = require('ember-cli/lib/utilities/string.js');
-
-function renderTemplate(name, context) {
-  var templateContent = fs.readFileSync(path.join(addonRoot, 'templates', name), 'utf8');
-  return template(templateContent, context);
-}
-
-function sampleValue(type) {
-  switch (type) {
-  case 'array':
-    return '[]';
-  case 'boolean':
-    return 'false';
-  case 'date':
-    return 'new Date()';
-  case 'number':
-    return '42';
-  case 'object':
-    return '{}';
-  case 'string':
-  default:
-    return "'MyString'";
-  }
-}
+var path                 = require('path');
+var assign               = require('lodash-node/compat/objects/assign');
+var inflection           = require('inflection');
+var stringUtils          = require('ember-cli/lib/utilities/string.js');
+var sampleDataFromAttrs  = require('../../lib/utilities/entity').sampleDataFromAttrs;
+var entityAttrs          = require('../../lib/utilities/entity').entityAttrs;
+var readTemplateFileSync = require('../../lib/utilities/read-template-file-sync');
 
 var blueprint = {
   anonymousOptions: [
@@ -52,20 +29,8 @@ var blueprint = {
     var dasherizedModuleName = stringUtils.dasherize(name);
     var dasherizedModuleNamePlural = inflection.pluralize(dasherizedModuleName);
     var camelizedModuleName = stringUtils.camelize(name);
-    var attrs = [];
-    var sampleData = [];
-
-    sampleData.push(' id: 1');
-
-    for(var name in entityOptions) {
-      var type = entityOptions[name] || '';
-      var dasherizedType = stringUtils.dasherize(type);
-      var attrName = stringUtils.camelize(name);
-      var label = inflection.humanize(name);
-      attrs.push({ name: attrName, label: label, sampleValue: sampleValue(dasherizedType) });
-      sampleData.push(attrName + ': ' + sampleValue(dasherizedType));
-    }
-    sampleData = '{' + sampleData.join(', ') + ' }';
+    var attrs = entityAttrs(entityOptions);
+    var sampleData = sampleDataFromAttrs(attrs);
 
     return {
       sampleData: sampleData,
@@ -81,7 +46,7 @@ var blueprint = {
   afterInstall: function(options) {
     var target = options.target;
     var routerFile = path.join(target, 'app', 'router.js');
-    var resourceRouterContent = renderTemplate('resource-router', this.locals(options));
+    var resourceRouterContent = readTemplateFileSync('resource-router', this.locals(options));
     this.insertInto(routerFile, 'Router.map(function() {\n', resourceRouterContent);
 
     return this.invoke('model');
@@ -89,7 +54,7 @@ var blueprint = {
   afterUninstall: function(options) {
     var target = options.target;
     var routerFile = path.join(target, 'app', 'router.js');
-    var resourceRouterContent = renderTemplate('resource-router', this.locals(options));
+    var resourceRouterContent = readTemplateFileSync('resource-router', this.locals(options));
     this.removeFromFile(routerFile, resourceRouterContent);
 
     return this.invoke('model');

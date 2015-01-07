@@ -47,7 +47,7 @@ describe('scaffold blueprint', function() {
         var routerJsContent = fs.readFileSync(targetFile , 'utf8');
         var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
 
-        assert.equal(routerJsContent, expected);
+        assert.equal(routerJsContent.trim(), expected.trim());
       });
     });
 
@@ -61,7 +61,7 @@ describe('scaffold blueprint', function() {
         var routerJsContent = fs.readFileSync(targetFile , 'utf8');
         var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-foos-users-resource'), 'utf8');
 
-        assert.equal(routerJsContent, expected);
+        assert.equal(routerJsContent.trim(), expected.trim());
       });
     });
 
@@ -75,7 +75,7 @@ describe('scaffold blueprint', function() {
         var routerJsContent = fs.readFileSync(targetFile , 'utf8');
         var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
 
-        assert.equal(routerJsContent, expected);
+        assert.equal(routerJsContent.trim(), expected.trim());
       });
     });
 
@@ -167,7 +167,7 @@ describe('scaffold blueprint', function() {
         var routerJsContent = fs.readFileSync(targetFile , 'utf8');
         var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'empty-router'), 'utf8');
 
-        assert.equal(routerJsContent, expected);
+        assert.equal(routerJsContent.trim(), expected.trim());
       });
     });
 
@@ -181,7 +181,7 @@ describe('scaffold blueprint', function() {
         var routerJsContent = fs.readFileSync(targetFile , 'utf8');
         var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
 
-        assert.equal(routerJsContent, expected);
+        assert.equal(routerJsContent.trim(), expected.trim());
       });
     });
 

@@ -4,7 +4,8 @@ var inflection           = require('inflection');
 var stringUtils          = require('ember-cli/lib/utilities/string.js');
 var sampleDataFromAttrs  = require('../../lib/utilities/entity').sampleDataFromAttrs;
 var entityAttrs          = require('../../lib/utilities/entity').entityAttrs;
-var readTemplateFileSync = require('../../lib/utilities/read-template-file-sync');
+var addScaffoldRoutes    = require('../../lib/utilities/scaffold-routes-generator').addScaffoldRoutes;
+var removeScaffoldRoutes = require('../../lib/utilities/scaffold-routes-generator').removeScaffoldRoutes;
 
 var blueprint = {
   anonymousOptions: [
@@ -46,16 +47,14 @@ var blueprint = {
   afterInstall: function(options) {
     var target = options.target;
     var routerFile = path.join(target, 'app', 'router.js');
-    var resourceRouterContent = readTemplateFileSync('resource-router', this.locals(options));
-    this.insertInto(routerFile, 'Router.map(function() {\n', resourceRouterContent);
+    addScaffoldRoutes(routerFile, this.locals(options));
 
     return this.invoke('model');
   },
   afterUninstall: function(options) {
     var target = options.target;
     var routerFile = path.join(target, 'app', 'router.js');
-    var resourceRouterContent = readTemplateFileSync('resource-router', this.locals(options));
-    this.removeFromFile(routerFile, resourceRouterContent);
+    removeScaffoldRoutes(routerFile, this.locals(options));
 
     return this.invoke('model');
   },

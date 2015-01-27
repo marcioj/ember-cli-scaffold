@@ -6,11 +6,11 @@
 
 <p>
   <strong>First name:</strong>
-  <span>{{firstName}}</span>
+  <span>{{model.firstName}}</span>
 </p>
 
 <p>
   <strong>Last name:</strong>
-  <span>{{lastName}}</span>
+  <span>{{model.lastName}}</span>
 </p>
 

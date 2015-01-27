@@ -2,13 +2,13 @@
   <div>
     <label>
       First name
-      {{input type="text" value=firstName}}
+      {{input type="text" value=model.firstName}}
     </label>
   </div>
   <div>
     <label>
       Last name
-      {{input type="text" value=lastName}}
+      {{input type="text" value=model.lastName}}
     </label>
   </div>
   <div>

@@ -4,7 +4,7 @@
   {{link-to "New <%= humanizedModuleName %>" "<%= dasherizedModuleNamePlural %>.new" }}
 </p>
 
-{{#if controller.length}}
+{{#if model.length}}
   <table>
     <thead>
       <tr><% attrs.forEach(function(attr) { %>
@@ -17,7 +17,7 @@
       </tr>
     </thead>
     <tbody>
-      {{#each <%= camelizedModuleName %> in controller}}
+      {{#each <%= camelizedModuleName %> in model}}
         <tr><% attrs.forEach(function(attr) { %>
           <td>
             {{<%= camelizedModuleName %>.<%= attr.name %>}}

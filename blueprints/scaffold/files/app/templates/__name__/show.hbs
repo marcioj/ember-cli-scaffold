@@ -6,6 +6,6 @@
 <% attrs.forEach(function(attr) { %>
 <p>
   <strong><%= attr.label %>:</strong>
-  <span>{{<%= attr.name %>}}</span>
+  <span>{{model.<%= attr.name %>}}</span>
 </p>
 <% }); %>

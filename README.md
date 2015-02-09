@@ -16,7 +16,7 @@ Since this addon doesn't install any adapter, the easy way to persist your data 
 
 Will generate the following files:
 
-- app/mixins/save-model-mixin.js
+- app/mixins/users/save-model-mixin.js
 - app/routes/users/edit.js
 - app/routes/users/index.js
 - app/routes/users/new.js

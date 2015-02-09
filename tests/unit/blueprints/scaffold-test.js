@@ -86,6 +86,21 @@ describe('scaffold blueprint', function() {
         var files = walkSync(path.join(tmproot, 'app', 'routes')).sort();
 
         assert.deepEqual(files, ['bros/','bros/edit.js','bros/index.js','bros/new.js']);
+
+        var actualContent = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'new-route'), 'utf8');
+        var expectedContent = fs.readFileSync(path.join(tmproot, 'app', 'routes', 'bros', 'new.js'), 'utf8');
+
+        assert.deepEqual(actualContent, expectedContent);
+
+        actualContent = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'edit-route'), 'utf8');
+        expectedContent = fs.readFileSync(path.join(tmproot, 'app', 'routes', 'bros', 'edit.js'), 'utf8');
+
+        assert.deepEqual(actualContent, expectedContent);
+
+        actualContent = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'index-route'), 'utf8');
+        expectedContent = fs.readFileSync(path.join(tmproot, 'app', 'routes', 'bros', 'index.js'), 'utf8');
+
+        assert.deepEqual(actualContent, expectedContent);
       });
     });
 
@@ -93,9 +108,9 @@ describe('scaffold blueprint', function() {
       options.entity.name = 'whatever';
 
       return blueprint.install(options).then(function() {
-        var files = walkSync(path.join(tmproot, 'app', 'mixins')).sort();
+        var files = walkSync(path.join(tmproot, 'app', 'mixins', 'whatevers')).sort();
         var actualContent = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'save-model-mixin'), 'utf8');
-        var expectedContent = fs.readFileSync(path.join(tmproot, 'app', 'mixins', 'save-model-mixin.js'), 'utf8');
+        var expectedContent = fs.readFileSync(path.join(tmproot, 'app', 'mixins', 'whatevers', 'save-model-mixin.js'), 'utf8');
 
         assert.deepEqual(files, ['save-model-mixin.js']);
         assert.deepEqual(actualContent, expectedContent);
@@ -202,10 +217,10 @@ describe('scaffold blueprint', function() {
     it('uninstalls the save-model-mixin mixin', function() {
       options.entity.name = 'whatever';
 
-      fs.ensureFileSync(path.join(tmproot, 'app', 'mixins', 'save-model-mixin.js'));
+      fs.ensureFileSync(path.join(tmproot, 'app', 'mixins', 'whatevers', 'save-model-mixin.js'));
 
       return blueprint.uninstall(options).then(function() {
-        var files = walkSync(path.join(tmproot, 'app', 'mixins')).sort();
+        var files = walkSync(path.join(tmproot, 'app', 'mixins', 'whatevers')).sort();
 
         assert.deepEqual(files, []);
       });

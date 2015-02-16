@@ -3,10 +3,10 @@ var MockProject       = require('ember-cli/tests/helpers/mock-project');
 var Blueprint         = require('ember-cli/lib/models/blueprint');
 var Promise           = require('ember-cli/lib/ext/promise');
 var root              = process.cwd();
-var rimraf            = Promise.denodeify(require('rimraf'));
+var fs                = require('fs-extra');
+var remove            = Promise.denodeify(fs.remove);
 var assert            = require('assert');
 var path              = require('path');
-var fs                = require('fs-extra');
 var walkSync          = require('walk-sync');
 var tmproot           = path.join(root, 'tmp');
 var lookupPath        = path.join(root, 'blueprints');
@@ -32,7 +32,7 @@ describe('scaffold blueprint', function() {
   });
 
   afterEach(function() {
-    return rimraf(tmproot);
+    return remove(tmproot);
   });
 
   describe('install', function() {

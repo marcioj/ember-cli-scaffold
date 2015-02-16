@@ -7,8 +7,9 @@ var entityAttrs          = require('../../lib/utilities/entity').entityAttrs;
 var buildNaming          = require('../../lib/utilities/entity').buildNaming;
 var addScaffoldRoutes    = require('../../lib/utilities/scaffold-routes-generator').addScaffoldRoutes;
 var removeScaffoldRoutes = require('../../lib/utilities/scaffold-routes-generator').removeScaffoldRoutes;
+var Blueprint            = require('../../lib/blueprint/ext');
 
-var blueprint = {
+module.exports = Blueprint.extend({
   anonymousOptions: [
     'name',
     'attr:type'
@@ -43,8 +44,5 @@ var blueprint = {
 
     return this.invoke('model');
   },
-};
+});
 
-assign(blueprint, require('../../lib/blueprint/ext'))
-
-module.exports = blueprint;

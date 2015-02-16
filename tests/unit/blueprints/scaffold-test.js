@@ -2,14 +2,16 @@ var MockUI            = require('ember-cli/tests/helpers/mock-ui');
 var MockProject       = require('ember-cli/tests/helpers/mock-project');
 var Blueprint         = require('ember-cli/lib/models/blueprint');
 var Promise           = require('ember-cli/lib/ext/promise');
-var root              = process.cwd();
 var fs                = require('fs-extra');
 var remove            = Promise.denodeify(fs.remove);
 var assert            = require('assert');
 var path              = require('path');
 var walkSync          = require('walk-sync');
-var tmproot           = path.join(root, 'tmp');
-var lookupPath        = path.join(root, 'blueprints');
+var testHelper        = require('../test-helper');
+var projectPath       = testHelper.projectPath;
+var fixturePath       = testHelper.fixturePath;
+var lookupPath        = testHelper.lookupPath;
+var projectRoot       = testHelper.projectRoot;
 
 describe('scaffold blueprint', function() {
   var blueprint;
@@ -19,63 +21,51 @@ describe('scaffold blueprint', function() {
   beforeEach(function() {
     var ui = new MockUI();
     var project = new MockProject();
-    project.root = tmproot;
+    project.root = projectRoot;
 
     options   = {
       entity: { name: null },
       ui: ui,
       project: project,
-      target: tmproot,
+      target: projectRoot,
       paths: [lookupPath]
     };
     blueprint = Blueprint.lookup('scaffold', options);
   });
 
   afterEach(function() {
-    return remove(tmproot);
+    return remove(projectRoot);
   });
 
   describe('install', function() {
 
     it('add the resource definition to router.js', function() {
       options.entity.name = 'user';
-      var sourceFile = path.join(root, 'tests', 'fixtures', 'empty-router');
-      var targetFile = path.join(tmproot, 'app', 'router.js');
-      fs.copySync(sourceFile, targetFile);
+      var targetFile = projectPath('app', 'router.js');
+      fs.copySync(fixturePath('empty-router'), targetFile);
 
       return blueprint.install(options).then(function() {
-        var routerJsContent = fs.readFileSync(targetFile , 'utf8');
-        var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
-
-        assert.equal(routerJsContent.trim(), expected.trim());
+        assert.fileEqual(targetFile, fixturePath('router-with-users-resource'));
       });
     });
 
     it('add the resource definition to router.js when others routes exist', function() {
       options.entity.name = 'foo';
-      var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
-      var targetFile = path.join(tmproot, 'app', 'router.js');
-      fs.copySync(sourceFile, targetFile);
+      var targetFile = projectPath('app', 'router.js');
+      fs.copySync(fixturePath('router-with-users-resource'), targetFile);
 
       return blueprint.install(options).then(function() {
-        var routerJsContent = fs.readFileSync(targetFile , 'utf8');
-        var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-foos-users-resource'), 'utf8');
-
-        assert.equal(routerJsContent.trim(), expected.trim());
+        assert.fileEqual(targetFile, fixturePath('router-with-foos-users-resource'));
       });
     });
 
     it('not add the same resource twice', function() {
       options.entity.name = 'user';
-      var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
-      var targetFile = path.join(tmproot, 'app', 'router.js');
-      fs.copySync(sourceFile, targetFile);
+      var targetFile = projectPath('app', 'router.js');
+      fs.copySync(fixturePath('router-with-users-resource'), targetFile);
 
       return blueprint.install(options).then(function() {
-        var routerJsContent = fs.readFileSync(targetFile , 'utf8');
-        var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
-
-        assert.equal(routerJsContent.trim(), expected.trim());
+        assert.fileEqual(targetFile, fixturePath('router-with-users-resource'));
       });
     });
 
@@ -83,24 +73,12 @@ describe('scaffold blueprint', function() {
       options.entity.name = 'bro';
 
       return blueprint.install(options).then(function() {
-        var files = walkSync(path.join(tmproot, 'app', 'routes')).sort();
+        var files = walkSync(projectPath('app', 'routes')).sort();
 
         assert.deepEqual(files, ['bros/','bros/edit.js','bros/index.js','bros/new.js']);
-
-        var actualContent = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'new-route'), 'utf8');
-        var expectedContent = fs.readFileSync(path.join(tmproot, 'app', 'routes', 'bros', 'new.js'), 'utf8');
-
-        assert.deepEqual(actualContent, expectedContent);
-
-        actualContent = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'edit-route'), 'utf8');
-        expectedContent = fs.readFileSync(path.join(tmproot, 'app', 'routes', 'bros', 'edit.js'), 'utf8');
-
-        assert.deepEqual(actualContent, expectedContent);
-
-        actualContent = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'index-route'), 'utf8');
-        expectedContent = fs.readFileSync(path.join(tmproot, 'app', 'routes', 'bros', 'index.js'), 'utf8');
-
-        assert.deepEqual(actualContent, expectedContent);
+        assert.fileEqual(fixturePath('new-route'), projectPath('app', 'routes', 'bros', 'new.js'));
+        assert.fileEqual(fixturePath('edit-route'), projectPath('app', 'routes', 'bros', 'edit.js'));
+        assert.fileEqual(fixturePath('index-route'), projectPath('app', 'routes', 'bros', 'index.js'));
       });
     });
 
@@ -108,12 +86,10 @@ describe('scaffold blueprint', function() {
       options.entity.name = 'whatever';
 
       return blueprint.install(options).then(function() {
-        var files = walkSync(path.join(tmproot, 'app', 'mixins', 'whatevers')).sort();
-        var actualContent = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'save-model-mixin'), 'utf8');
-        var expectedContent = fs.readFileSync(path.join(tmproot, 'app', 'mixins', 'whatevers', 'save-model-mixin.js'), 'utf8');
+        var files = walkSync(projectPath('app', 'mixins', 'whatevers')).sort();
 
         assert.deepEqual(files, ['save-model-mixin.js']);
-        assert.deepEqual(actualContent, expectedContent);
+        assert.fileEqual(fixturePath('save-model-mixin'), projectPath('app', 'mixins', 'whatevers', 'save-model-mixin.js'));
       });
     });
 
@@ -121,7 +97,7 @@ describe('scaffold blueprint', function() {
       options.entity.name = 'post';
 
       return blueprint.install(options).then(function() {
-        var files = walkSync(path.join(tmproot, 'app', 'models')).sort();
+        var files = walkSync(projectPath('app', 'models')).sort();
 
         assert.deepEqual(files, ['post.js']);
       });
@@ -132,39 +108,15 @@ describe('scaffold blueprint', function() {
       options.entity.options = { first_name: 'string', last_name: 'string' };
 
       return blueprint.install(options).then(function() {
-        var files = walkSync(path.join(tmproot, 'app', 'templates')).sort();
+        var files = walkSync(projectPath('app', 'templates')).sort();
 
         assert.deepEqual(files, ['users/', 'users/-form.hbs', 'users/edit.hbs', 'users/index.hbs', 'users/new.hbs', 'users/show.hbs']);
-
-        var expectedShowTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'show-template'), 'utf8');
-        var showTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'users', 'show.hbs'), 'utf8');
-
-        assert.equal(showTemplate, expectedShowTemplate);
-
-        var expectedNewTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'new-template'), 'utf8');
-        var newTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'users', 'new.hbs'), 'utf8');
-
-        assert.equal(newTemplate, expectedNewTemplate);
-
-        var expectedIndexTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'index-template'), 'utf8');
-        var indexTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'users', 'index.hbs'), 'utf8');
-
-        assert.equal(indexTemplate, expectedIndexTemplate);
-
-        var expectedEditTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'edit-template'), 'utf8');
-        var editTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'users', 'edit.hbs'), 'utf8');
-
-        assert.equal(editTemplate, expectedEditTemplate);
-
-        var expectedFormTemplate = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'form-template'), 'utf8');
-        var formTemplate = fs.readFileSync(path.join(tmproot, 'app', 'templates', 'users', '-form.hbs'), 'utf8');
-
-        assert.equal(formTemplate, expectedFormTemplate);
-
-        var expectedAcceptanceTest = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'user-acceptance-test'), 'utf8');
-        var acceptanceTest = fs.readFileSync(path.join(tmproot, 'tests', 'acceptance', 'users-test.js'), 'utf8');
-
-        assert.equal(acceptanceTest, expectedAcceptanceTest);
+        assert.fileEqual(fixturePath('show-template'), projectPath('app', 'templates', 'users', 'show.hbs'));
+        assert.fileEqual(fixturePath('new-template'), projectPath('app', 'templates', 'users', 'new.hbs'));
+        assert.fileEqual(fixturePath('index-template'), projectPath('app', 'templates', 'users', 'index.hbs'));
+        assert.fileEqual(fixturePath('edit-template'), projectPath('app', 'templates', 'users', 'edit.hbs'));
+        assert.fileEqual(fixturePath('form-template'), projectPath('app', 'templates', 'users', '-form.hbs'));
+        assert.fileEqual(fixturePath('user-acceptance-test'), projectPath('tests', 'acceptance', 'users-test.js'));
       });
     });
 
@@ -174,29 +126,21 @@ describe('scaffold blueprint', function() {
 
     it('removes the resource definition from router.js', function() {
       options.entity.name = 'user';
-      var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
-      var targetFile = path.join(tmproot, 'app', 'router.js');
-      fs.copySync(sourceFile, targetFile);
+      var targetFile = projectPath('app', 'router.js');
+      fs.copySync(fixturePath('router-with-users-resource'), targetFile);
 
       return blueprint.uninstall(options).then(function() {
-        var routerJsContent = fs.readFileSync(targetFile , 'utf8');
-        var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'empty-router'), 'utf8');
-
-        assert.equal(routerJsContent.trim(), expected.trim());
+        assert.fileEqual(targetFile, fixturePath('empty-router'));
       });
     });
 
     it('not affect other resources in router.js', function() {
       options.entity.name = 'foo';
-      var sourceFile = path.join(root, 'tests', 'fixtures', 'router-with-users-resource');
-      var targetFile = path.join(tmproot, 'app', 'router.js');
-      fs.copySync(sourceFile, targetFile);
+      var targetFile = projectPath('app', 'router.js');
+      fs.copySync(fixturePath('router-with-users-resource'), targetFile);
 
       return blueprint.uninstall(options).then(function() {
-        var routerJsContent = fs.readFileSync(targetFile , 'utf8');
-        var expected = fs.readFileSync(path.join(root, 'tests', 'fixtures', 'router-with-users-resource'), 'utf8');
-
-        assert.equal(routerJsContent.trim(), expected.trim());
+        assert.fileEqual(targetFile, fixturePath('router-with-users-resource'));
       });
     });
 
@@ -204,11 +148,11 @@ describe('scaffold blueprint', function() {
       options.entity.name = 'bro';
 
       ['edit.js','index.js','new.js'].forEach(function(file) {
-        fs.ensureFileSync(path.join(tmproot, 'app', 'routes', 'bros', file));
+        fs.ensureFileSync(projectPath('app', 'routes', 'bros', file));
       });
 
       return blueprint.uninstall(options).then(function() {
-        var files = walkSync(path.join(tmproot, 'app', 'routes')).sort();
+        var files = walkSync(projectPath('app', 'routes')).sort();
 
         assert.deepEqual(files, ['bros/']);
       });
@@ -217,10 +161,10 @@ describe('scaffold blueprint', function() {
     it('uninstalls the save-model-mixin mixin', function() {
       options.entity.name = 'whatever';
 
-      fs.ensureFileSync(path.join(tmproot, 'app', 'mixins', 'whatevers', 'save-model-mixin.js'));
+      fs.ensureFileSync(projectPath('app', 'mixins', 'whatevers', 'save-model-mixin.js'));
 
       return blueprint.uninstall(options).then(function() {
-        var files = walkSync(path.join(tmproot, 'app', 'mixins', 'whatevers')).sort();
+        var files = walkSync(projectPath('app', 'mixins', 'whatevers')).sort();
 
         assert.deepEqual(files, []);
       });
@@ -229,10 +173,10 @@ describe('scaffold blueprint', function() {
     it('uninstalls the model', function() {
       options.entity.name = 'user';
 
-      fs.ensureFileSync(path.join(tmproot, 'app', 'models', 'user.js'));
+      fs.ensureFileSync(projectPath('app', 'models', 'user.js'));
 
       return blueprint.uninstall(options).then(function() {
-        var files = walkSync(path.join(tmproot, 'app', 'models')).sort();
+        var files = walkSync(projectPath('app', 'models')).sort();
 
         assert.deepEqual(files, []);
       });
@@ -243,11 +187,11 @@ describe('scaffold blueprint', function() {
       options.entity.options = { first_name: 'string', last_name: 'string' };
 
       ['-form.hbs', 'new.hbs', 'index.hbs', 'edit.hbs', 'show.hbs'].forEach(function(template) {
-        fs.ensureFileSync(path.join(tmproot, 'app', 'templates', 'users', template));
+        fs.ensureFileSync(projectPath('app', 'templates', 'users', template));
       });
 
       return blueprint.uninstall(options).then(function() {
-        var files = walkSync(path.join(tmproot, 'app', 'templates')).sort();
+        var files = walkSync(projectPath('app', 'templates')).sort();
 
         assert.deepEqual(files, ['users/']);
       });

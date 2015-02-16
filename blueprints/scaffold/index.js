@@ -1,5 +1,4 @@
 var path                 = require('path');
-var assign               = require('lodash-node/compat/objects/assign');
 var inflection           = require('inflection');
 var stringUtils          = require('ember-cli/lib/utilities/string.js');
 var sampleDataFromAttrs  = require('../../lib/utilities/entity').sampleDataFromAttrs;

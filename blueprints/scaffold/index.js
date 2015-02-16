@@ -17,8 +17,7 @@ var blueprint = {
   fileMapTokens: function(options) {
     return {
       __name__: function(options) {
-        // TODO use locals instead
-        return inflection.pluralize(options.dasherizedModuleName);
+        return options.locals.dasherizedModuleNamePlural
       }
     }
   },

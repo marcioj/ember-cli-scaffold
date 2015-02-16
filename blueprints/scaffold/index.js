@@ -4,6 +4,7 @@ var inflection           = require('inflection');
 var stringUtils          = require('ember-cli/lib/utilities/string.js');
 var sampleDataFromAttrs  = require('../../lib/utilities/entity').sampleDataFromAttrs;
 var entityAttrs          = require('../../lib/utilities/entity').entityAttrs;
+var buildNaming          = require('../../lib/utilities/entity').buildNaming;
 var addScaffoldRoutes    = require('../../lib/utilities/scaffold-routes-generator').addScaffoldRoutes;
 var removeScaffoldRoutes = require('../../lib/utilities/scaffold-routes-generator').removeScaffoldRoutes;
 
@@ -22,27 +23,12 @@ var blueprint = {
     }
   },
   locals: function(options) {
-    var name = options.entity.name;
-    var entityOptions = options.entity.options;
-    var humanizedModuleName = inflection.humanize(name);
-    var humanizedModuleNamePlural = inflection.pluralize(humanizedModuleName);
-    var classifiedModuleName = stringUtils.classify(name);
-    var dasherizedModuleName = stringUtils.dasherize(name);
-    var dasherizedModuleNamePlural = inflection.pluralize(dasherizedModuleName);
-    var camelizedModuleName = stringUtils.camelize(name);
-    var attrs = entityAttrs(entityOptions);
+    var attrs = entityAttrs(options.entity.options);
     var sampleData = sampleDataFromAttrs(attrs);
-
-    return {
-      sampleData: sampleData,
-      attrs: attrs,
-      humanizedModuleName: humanizedModuleName,
-      humanizedModuleNamePlural: humanizedModuleNamePlural,
-      classifiedModuleName: classifiedModuleName,
-      dasherizedModuleName: dasherizedModuleName,
-      dasherizedModuleNamePlural: dasherizedModuleNamePlural,
-      camelizedModuleName: camelizedModuleName
-    }
+    var locals = buildNaming(options.entity.name);
+    locals.sampleData = sampleData;
+    locals.attrs = attrs;
+    return locals;
   },
   afterInstall: function(options) {
     var target = options.target;

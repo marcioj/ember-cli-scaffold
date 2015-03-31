@@ -87,7 +87,7 @@ test('update an existing <%= dasherizedModuleName %>', function(assert) {
 
 test('show an existing <%= dasherizedModuleName %>', function(assert) {
   defineFixturesFor('<%= dasherizedModuleName %>', [<%= sampleData %>]);
-  visit('/users');
+  visit('/<%= dasherizedModuleNamePlural %>');
   click('a:contains(Show)');
 
   andThen(function() {

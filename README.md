@@ -3,6 +3,7 @@
 >  Scaffolds models, routes and templates a la rails
 
 [![Build Status][travis_badge]][travis]
+[![Ember Observer Score][ember_observer_badge]][ember_observer]
 
 ## Installation
 
@@ -41,3 +42,5 @@ Will generate the following files:
 
 [travis]: https://travis-ci.org/marcioj/ember-cli-scaffold
 [travis_badge]: https://api.travis-ci.org/marcioj/ember-cli-scaffold.svg?branch=master
+[ember_observer]: http://emberobserver.com/addons/ember-cli-scaffold
+[ember_observer_badge]: http://emberobserver.com/badges/ember-cli-scaffold.svg

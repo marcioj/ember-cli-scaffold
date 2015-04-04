@@ -12,6 +12,10 @@ export default Ember.Mixin.create({
     }
   },
   deactivate: function() {
-    this.currentModel.rollback();
+    if (this.currentModel.get('isNew')) {
+      this.currentModel.deleteRecord();
+    } else {
+      this.currentModel.rollback();
+    }
   }
 });

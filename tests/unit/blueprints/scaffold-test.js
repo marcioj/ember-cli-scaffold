@@ -120,6 +120,17 @@ describe('scaffold blueprint', function() {
       });
     });
 
+    it('installs the application adapter', function() {
+      options.entity.name = 'user';
+      options.entity.options = { first_name: 'string', last_name: 'string' };
+
+      return blueprint.install(options).then(function() {
+        var files = walkSync(projectPath('app', 'adapters')).sort();
+
+        assert.deepEqual(files, ['application.js']);
+        assert.fileEqual(fixturePath('fixture-adapter'), projectPath('app', 'adapters', 'application.js'));
+      });
+    });
   });
 
   describe('uninstall', function() {
@@ -194,6 +205,19 @@ describe('scaffold blueprint', function() {
         var files = walkSync(projectPath('app', 'templates')).sort();
 
         assert.deepEqual(files, ['users/']);
+      });
+    });
+
+    it('uninstalls the application adapter', function() {
+      options.entity.name = 'user';
+      options.entity.options = { first_name: 'string', last_name: 'string' };
+
+      fs.ensureFileSync(projectPath('app', 'adapters', 'application.js'));
+
+      return blueprint.uninstall(options).then(function() {
+        var files = walkSync(projectPath('app', 'adapters')).sort();
+
+        assert.deepEqual(files, []);
       });
     });
 

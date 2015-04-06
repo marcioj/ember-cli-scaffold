@@ -9,14 +9,14 @@
 
 In your ember-cli app, do `npm install --save-dev ember-cli-scaffold`
 
-Since this addon doesn't install any adapter, the easy way to persist your data is installing the [ember-localstorage-adapter](https://github.com/kurko/ember-localstorage-adapter)
-
 ## Running
 
 `ember generate scaffold user first_name:string last_name:string age:number`
+`open http://localhost:4200/users`
 
-Will generate the following files:
+The generated files are the following:
 
+- app/adapters/user.js
 - app/mixins/users/save-model-mixin.js
 - app/routes/users/edit.js
 - app/routes/users/index.js
@@ -26,7 +26,15 @@ Will generate the following files:
 - app/templates/users/index.hbs
 - app/templates/users/new.hbs
 - app/templates/users/show.hbs
+- tests/acceptance/users-test.js
 - app/models/user.js
+
+They contain all the CRUD operations and an acceptance test with all tests passing.
+
+## TODO
+
+[ ] Handle relationships
+[ ] Pod structure support
 
 ## Running Tests
 

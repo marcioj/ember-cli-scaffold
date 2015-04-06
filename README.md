@@ -12,6 +12,7 @@ In your ember-cli app, do `npm install --save-dev ember-cli-scaffold`
 ## Running
 
 `ember generate scaffold user first_name:string last_name:string age:number`
+
 `open http://localhost:4200/users`
 
 The generated files are the following:
@@ -34,6 +35,7 @@ They contain all the CRUD operations and an acceptance test with all tests passi
 ## TODO
 
 [ ] Handle relationships
+
 [ ] Pod structure support
 
 ## Running Tests

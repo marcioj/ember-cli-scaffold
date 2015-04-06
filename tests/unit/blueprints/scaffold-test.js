@@ -21,6 +21,9 @@ describe('scaffold blueprint', function() {
   beforeEach(function() {
     var ui = new MockUI();
     var project = new MockProject();
+    MockProject.prototype.blueprintLookupPaths = function() {
+      return [lookupPath];
+    };
     project.root = projectRoot;
 
     options   = {

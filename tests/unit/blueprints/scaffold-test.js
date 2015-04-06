@@ -123,15 +123,15 @@ describe('scaffold blueprint', function() {
       });
     });
 
-    it('installs the application adapter', function() {
+    it('installs the resource adapter', function() {
       options.entity.name = 'user';
       options.entity.options = { first_name: 'string', last_name: 'string' };
 
       return blueprint.install(options).then(function() {
         var files = walkSync(projectPath('app', 'adapters')).sort();
 
-        assert.deepEqual(files, ['application.js']);
-        assert.fileEqual(fixturePath('fixture-adapter'), projectPath('app', 'adapters', 'application.js'));
+        assert.deepEqual(files, ['user.js']);
+        assert.fileEqual(fixturePath('fixture-adapter'), projectPath('app', 'adapters', 'user.js'));
       });
     });
   });
@@ -211,11 +211,11 @@ describe('scaffold blueprint', function() {
       });
     });
 
-    it('uninstalls the application adapter', function() {
+    it('uninstalls the resrouce adapter', function() {
       options.entity.name = 'user';
       options.entity.options = { first_name: 'string', last_name: 'string' };
 
-      fs.ensureFileSync(projectPath('app', 'adapters', 'application.js'));
+      fs.ensureFileSync(projectPath('app', 'adapters', 'user.js'));
 
       return blueprint.uninstall(options).then(function() {
         var files = walkSync(projectPath('app', 'adapters')).sort();

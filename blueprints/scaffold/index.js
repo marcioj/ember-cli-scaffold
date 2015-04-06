@@ -15,6 +15,9 @@ module.exports = Blueprint.extend({
   description: '',
   fileMapTokens: function(options) {
     return {
+      __name_singular__: function(options) {
+        return options.locals.dasherizedModuleName
+      },
       __name__: function(options) {
         return options.locals.dasherizedModuleNamePlural
       }

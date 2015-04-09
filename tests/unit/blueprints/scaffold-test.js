@@ -7,6 +7,7 @@ var remove            = Promise.denodeify(fs.remove);
 var assert            = require('assert');
 var path              = require('path');
 var walkSync          = require('walk-sync');
+var chalk             = require('chalk');
 var testHelper        = require('../test-helper');
 var projectPath       = testHelper.projectPath;
 var fixturePath       = testHelper.fixturePath;
@@ -17,9 +18,10 @@ describe('scaffold blueprint', function() {
   var blueprint;
   var options;
   var entityName;
+  var ui;
 
   beforeEach(function() {
-    var ui = new MockUI();
+    ui = new MockUI();
     var project = new MockProject();
     MockProject.prototype.blueprintLookupPaths = function() {
       return [lookupPath];
@@ -134,6 +136,15 @@ describe('scaffold blueprint', function() {
         assert.fileEqual(fixturePath('fixture-adapter'), projectPath('app', 'adapters', 'user.js'));
       });
     });
+
+    it('displays the change in app/router.js', function() {
+      options.entity.name = 'user';
+      options.entity.options = { first_name: 'string', last_name: 'string' };
+
+      return blueprint.install(options).then(function() {
+        assert.ok(ui.output.indexOf(chalk.green('change') + ' app/router.js') !== -1);
+      });
+    });
   });
 
   describe('uninstall', function() {
@@ -224,6 +235,14 @@ describe('scaffold blueprint', function() {
       });
     });
 
+    it('displays the change in app/router.js', function() {
+      options.entity.name = 'user';
+      options.entity.options = { first_name: 'string', last_name: 'string' };
+
+      return blueprint.uninstall(options).then(function() {
+        assert.ok(ui.output.indexOf(chalk.red('change') + ' app/router.js') !== -1);
+      });
+    });
   });
 
 });

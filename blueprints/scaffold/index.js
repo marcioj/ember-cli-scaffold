@@ -1,4 +1,5 @@
 var path                 = require('path');
+var fs                   = require('fs-extra');
 var inflection           = require('inflection');
 var sampleDataFromAttrs  = require('../../lib/utilities/entity').sampleDataFromAttrs;
 var entityAttrs          = require('../../lib/utilities/entity').entityAttrs;
@@ -42,17 +43,21 @@ module.exports = Blueprint.extend({
   },
   _addScaffoldRoutes: function(options) {
     var routerFile = path.join(options.target, 'app', 'router.js');
-    this._writeStatusToUI(chalk.green, 'change', 'app/router.js');
-    if(!options.dryRun) {
-      addScaffoldRoutes(routerFile, this.locals(options));
+    if (fs.existsSync(routerFile)) {
+      var status = addScaffoldRoutes(routerFile, this.locals(options));
+      this._writeRouterStatus(status, 'green');
     }
   },
   _removeScaffoldRoutes: function(options) {
     var routerFile = path.join(options.target, 'app', 'router.js');
-    this._writeStatusToUI(chalk.red, 'change', 'app/router.js');
-    if(!options.dryRun) {
-      removeScaffoldRoutes(routerFile, this.locals(options));
+    if (fs.existsSync(routerFile)) {
+      var status = removeScaffoldRoutes(routerFile, this.locals(options));
+      this._writeRouterStatus(status, 'red');
     }
+  },
+  _writeRouterStatus: function(status, operationColor) {
+    var color = status === 'identical' ? 'yellow' : operationColor;
+    this._writeStatusToUI(chalk[color], status, 'app/router.js');
   }
 });
 

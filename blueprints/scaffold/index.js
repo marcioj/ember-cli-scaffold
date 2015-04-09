@@ -6,6 +6,7 @@ var buildNaming          = require('../../lib/utilities/entity').buildNaming;
 var addScaffoldRoutes    = require('../../lib/utilities/scaffold-routes-generator').addScaffoldRoutes;
 var removeScaffoldRoutes = require('../../lib/utilities/scaffold-routes-generator').removeScaffoldRoutes;
 var Blueprint            = require('../../lib/blueprint/ext');
+var chalk                = require('chalk');
 
 module.exports = Blueprint.extend({
   anonymousOptions: [
@@ -32,18 +33,26 @@ module.exports = Blueprint.extend({
     return locals;
   },
   afterInstall: function(options) {
-    var target = options.target;
-    var routerFile = path.join(target, 'app', 'router.js');
-
-    addScaffoldRoutes(routerFile, this.locals(options));
+    this._addScaffoldRoutes(options);
     return this.invoke('model');
   },
   afterUninstall: function(options) {
-    var target = options.target;
-    var routerFile = path.join(target, 'app', 'router.js');
-
-    removeScaffoldRoutes(routerFile, this.locals(options));
+    this._removeScaffoldRoutes(options);
     return this.invoke('model');
   },
+  _addScaffoldRoutes: function(options) {
+    var routerFile = path.join(options.target, 'app', 'router.js');
+    this._writeStatusToUI(chalk.green, 'change', 'app/router.js');
+    if(!options.dryRun) {
+      addScaffoldRoutes(routerFile, this.locals(options));
+    }
+  },
+  _removeScaffoldRoutes: function(options) {
+    var routerFile = path.join(options.target, 'app', 'router.js');
+    this._writeStatusToUI(chalk.red, 'change', 'app/router.js');
+    if(!options.dryRun) {
+      removeScaffoldRoutes(routerFile, this.locals(options));
+    }
+  }
 });
 

@@ -15,6 +15,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "chalk": "1.0.0",
     "mocha": "^2.0.1",
     "walk-sync": "^0.1.3"
   },

@@ -141,8 +141,23 @@ describe('scaffold blueprint', function() {
       options.entity.name = 'user';
       options.entity.options = { first_name: 'string', last_name: 'string' };
 
+      var targetFile = projectPath('app', 'router.js');
+      fs.copySync(fixturePath('empty-router'), targetFile);
+
       return blueprint.install(options).then(function() {
         assert.ok(ui.output.indexOf(chalk.green('change') + ' app/router.js') !== -1);
+      });
+    });
+
+    it('displays identical if app/router.js has not changed', function() {
+      options.entity.name = 'user';
+      options.entity.options = { first_name: 'string', last_name: 'string' };
+
+      var targetFile = projectPath('app', 'router.js');
+      fs.copySync(fixturePath('empty-router'), targetFile);
+
+      return Promise.all([blueprint.install(options), blueprint.install(options)]).then(function() {
+        assert.ok(ui.output.indexOf(chalk.yellow('identical') + ' app/router.js') !== -1);
       });
     });
   });
@@ -239,8 +254,27 @@ describe('scaffold blueprint', function() {
       options.entity.name = 'user';
       options.entity.options = { first_name: 'string', last_name: 'string' };
 
-      return blueprint.uninstall(options).then(function() {
-        assert.ok(ui.output.indexOf(chalk.red('change') + ' app/router.js') !== -1);
+      var targetFile = projectPath('app', 'router.js');
+      fs.copySync(fixturePath('empty-router'), targetFile);
+
+      return blueprint.install(options).then(function() {
+        return blueprint.uninstall(options).then(function() {
+          assert.ok(ui.output.indexOf(chalk.red('change') + ' app/router.js') !== -1);
+        });
+      });
+    });
+
+    it('displays identical if app/router.js has not changed', function() {
+      options.entity.name = 'user';
+      options.entity.options = { first_name: 'string', last_name: 'string' };
+
+      var targetFile = projectPath('app', 'router.js');
+      fs.copySync(fixturePath('empty-router'), targetFile);
+
+      return Promise.all([blueprint.install(options), blueprint.install(options)]).then(function() {
+        return blueprint.uninstall(options).then(function() {
+          assert.ok(ui.output.indexOf(chalk.yellow('identical') + ' app/router.js') !== -1);
+        });
       });
     });
   });

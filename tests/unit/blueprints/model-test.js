@@ -1,3 +1,5 @@
+'use strict';
+
 var MockUI            = require('ember-cli/tests/helpers/mock-ui');
 var MockProject       = require('ember-cli/tests/helpers/mock-project');
 var Blueprint         = require('ember-cli/lib/models/blueprint');

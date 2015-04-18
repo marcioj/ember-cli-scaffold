@@ -12,7 +12,7 @@
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
+  "author": "Marcio Junior",
   "license": "MIT",
   "devDependencies": {
     "chalk": "1.0.0",

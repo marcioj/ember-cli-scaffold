@@ -6,15 +6,18 @@ var entityAttrs          = require('../../lib/utilities/entity').entityAttrs;
 var buildNaming          = require('../../lib/utilities/entity').buildNaming;
 var addScaffoldRoutes    = require('../../lib/utilities/scaffold-routes-generator').addScaffoldRoutes;
 var removeScaffoldRoutes = require('../../lib/utilities/scaffold-routes-generator').removeScaffoldRoutes;
-var Blueprint            = require('../../lib/blueprint/ext');
 var chalk                = require('chalk');
 
-module.exports = Blueprint.extend({
+module.exports = {
   anonymousOptions: [
     'name',
     'attr:type'
   ],
   description: '',
+  invoke: function(name, operation, options) {
+    var blueprint = this.lookupBlueprint(name);
+    return blueprint[operation](options);
+  },
   fileMapTokens: function(options) {
     return {
       __name_singular__: function(options) {
@@ -35,11 +38,11 @@ module.exports = Blueprint.extend({
   },
   afterInstall: function(options) {
     this._addScaffoldRoutes(options);
-    return this.invoke('model');
+    return this.invoke('model', 'install', options);
   },
   afterUninstall: function(options) {
     this._removeScaffoldRoutes(options);
-    return this.invoke('model');
+    return this.invoke('model', 'uninstall', options);
   },
   _addScaffoldRoutes: function(options) {
     var routerFile = path.join(options.target, 'app', 'router.js');
@@ -59,5 +62,5 @@ module.exports = Blueprint.extend({
     var color = status === 'identical' ? 'yellow' : operationColor;
     this._writeStatusToUI(chalk[color], status, 'app/router.js');
   }
-});
+}
 

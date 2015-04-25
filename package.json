@@ -17,6 +17,7 @@
   "devDependencies": {
     "chalk": "1.0.0",
     "ember-cli": "0.2.3",
+    "ember-cli-release": "0.2.3",
     "mocha": "^2.0.1",
     "mocha-jshint": "^1.0.0",
     "walk-sync": "^0.1.3"

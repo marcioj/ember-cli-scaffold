@@ -15,7 +15,7 @@ var fixturePath       = testHelper.fixturePath;
 var lookupPath        = testHelper.lookupPath;
 var projectRoot       = testHelper.projectRoot;
 
-describe('Unit: scaffold model', function() {
+describe('Unit: scaffold acceptance test', function() {
   var blueprint;
   var options;
   var entityName;
@@ -33,7 +33,7 @@ describe('Unit: scaffold model', function() {
       paths: [lookupPath],
       inRepoAddon: null
     };
-    blueprint = Blueprint.lookup('model', options);
+    blueprint = Blueprint.lookup('acceptance-test', options);
   });
 
   afterEach(function() {
@@ -42,23 +42,12 @@ describe('Unit: scaffold model', function() {
 
   describe('install', function() {
 
-    it('installs the model', function() {
-      options.entity.name = 'post';
-
-      return blueprint.install(options).then(function() {
-        var files = walkSync(projectPath('app', 'models')).sort();
-
-        assert.deepEqual(files, ['post.js']);
-      });
-    });
-
-    it('overrides the model blueprint to generate with fixtures array', function() {
+    it('installs the acceptance test', function() {
       options.entity.name = 'user';
       options.entity.options = { first_name: 'string', last_name: 'string' };
-      var targetFile = projectPath('app', 'models', 'user.js');
 
       return blueprint.install(options).then(function() {
-        assert.fileEqual(targetFile, fixturePath('overrided-model-with-fixtures-array'));
+        assert.fileEqual(fixturePath('user-acceptance-test'), projectPath('tests', 'acceptance', 'users-test.js'));
       });
     });
 
@@ -66,13 +55,13 @@ describe('Unit: scaffold model', function() {
 
   describe('uninstall', function() {
 
-    it('uninstalls the model', function() {
+    it('uninstalls the acceptance test', function() {
       options.entity.name = 'user';
 
-      fs.ensureFileSync(projectPath('app', 'models', 'user.js'));
+      fs.ensureFileSync(projectPath('tests', 'acceptance', 'users-test.js'));
 
       return blueprint.uninstall(options).then(function() {
-        var files = walkSync(projectPath('app', 'models')).sort();
+        var files = walkSync(projectPath('tests', 'acceptance'));
 
         assert.deepEqual(files, []);
       });

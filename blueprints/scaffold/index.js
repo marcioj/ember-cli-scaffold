@@ -1,8 +1,6 @@
 var path                 = require('path');
 var fs                   = require('fs-extra');
-var inflection           = require('inflection');
-var sampleDataFromAttrs  = require('../../lib/utilities/entity').sampleDataFromAttrs;
-var entityAttrs          = require('../../lib/utilities/entity').entityAttrs;
+var RSVP                 = require('rsvp');
 var buildNaming          = require('../../lib/utilities/entity').buildNaming;
 var addScaffoldRoutes    = require('../../lib/utilities/scaffold-routes-generator').addScaffoldRoutes;
 var removeScaffoldRoutes = require('../../lib/utilities/scaffold-routes-generator').removeScaffoldRoutes;
@@ -13,48 +11,46 @@ module.exports = {
     'name',
     'attr:type'
   ],
-  description: '',
+  description: 'Scaffolds an entire resource',
   invoke: function(name, operation, options) {
     var blueprint = this.lookupBlueprint(name);
     return blueprint[operation](options);
   },
-  fileMapTokens: function(options) {
-    return {
-      __name_singular__: function(options) {
-        return options.locals.dasherizedModuleName
-      },
-      __name__: function(options) {
-        return options.locals.dasherizedModuleNamePlural
-      }
-    }
-  },
-  locals: function(options) {
-    var attrs = entityAttrs(options.entity.options);
-    var sampleData = sampleDataFromAttrs(attrs);
-    var locals = buildNaming(options.entity.name);
-    locals.sampleData = sampleData;
-    locals.attrs = attrs;
-    return locals;
-  },
   afterInstall: function(options) {
     this._addScaffoldRoutes(options);
-    return this.invoke('model', 'install', options);
+    return RSVP.all([
+      this.invoke('model', 'install', options),
+      this.invoke('adapter', 'install', options),
+      this.invoke('template', 'install', options),
+      this.invoke('route', 'install', options),
+      this.invoke('mixin', 'install', options),
+      this.invoke('acceptance-test', 'install', options)
+    ]);
   },
   afterUninstall: function(options) {
     this._removeScaffoldRoutes(options);
-    return this.invoke('model', 'uninstall', options);
+    return RSVP.all([
+      this.invoke('model', 'uninstall', options),
+      this.invoke('adapter', 'uninstall', options),
+      this.invoke('template', 'uninstall', options),
+      this.invoke('route', 'uninstall', options),
+      this.invoke('mixin', 'uninstall', options),
+      this.invoke('acceptance-test', 'uninstall', options)
+    ]);
   },
   _addScaffoldRoutes: function(options) {
     var routerFile = path.join(options.target, 'app', 'router.js');
     if (fs.existsSync(routerFile)) {
-      var status = addScaffoldRoutes(routerFile, this.locals(options));
+      var locals = buildNaming(options.entity.name);
+      var status = addScaffoldRoutes(routerFile, locals);
       this._writeRouterStatus(status, 'green');
     }
   },
   _removeScaffoldRoutes: function(options) {
     var routerFile = path.join(options.target, 'app', 'router.js');
     if (fs.existsSync(routerFile)) {
-      var status = removeScaffoldRoutes(routerFile, this.locals(options));
+      var locals = buildNaming(options.entity.name);
+      var status = removeScaffoldRoutes(routerFile, locals);
       this._writeRouterStatus(status, 'red');
     }
   },

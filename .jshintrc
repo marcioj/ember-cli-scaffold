@@ -7,7 +7,7 @@
     "afterEach",
     "before",
     "after",
-    "-Promise"
+    "Promise"
   ],
   "expr": true,
   "proto": true,

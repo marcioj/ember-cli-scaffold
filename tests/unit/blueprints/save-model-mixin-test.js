@@ -15,7 +15,7 @@ var fixturePath       = testHelper.fixturePath;
 var lookupPath        = testHelper.lookupPath;
 var projectRoot       = testHelper.projectRoot;
 
-describe('Unit: scaffold model', function() {
+describe('Unit: scaffold save model mixin', function() {
   var blueprint;
   var options;
   var entityName;
@@ -33,7 +33,7 @@ describe('Unit: scaffold model', function() {
       paths: [lookupPath],
       inRepoAddon: null
     };
-    blueprint = Blueprint.lookup('model', options);
+    blueprint = Blueprint.lookup('mixin', options);
   });
 
   afterEach(function() {
@@ -42,37 +42,29 @@ describe('Unit: scaffold model', function() {
 
   describe('install', function() {
 
-    it('installs the model', function() {
-      options.entity.name = 'post';
+    it('installs the save-model-mixin mixin', function() {
+      options.entity.name = 'whatever';
 
       return blueprint.install(options).then(function() {
-        var files = walkSync(projectPath('app', 'models')).sort();
+        var files = walkSync(projectPath('app', 'mixins', 'whatevers')).sort();
 
-        assert.deepEqual(files, ['post.js']);
+        assert.deepEqual(files, ['save-model-mixin.js']);
+        assert.fileEqual(fixturePath('save-model-mixin'), projectPath('app', 'mixins', 'whatevers', 'save-model-mixin.js'));
       });
     });
 
-    it('overrides the model blueprint to generate with fixtures array', function() {
-      options.entity.name = 'user';
-      options.entity.options = { first_name: 'string', last_name: 'string' };
-      var targetFile = projectPath('app', 'models', 'user.js');
-
-      return blueprint.install(options).then(function() {
-        assert.fileEqual(targetFile, fixturePath('overrided-model-with-fixtures-array'));
-      });
-    });
 
   });
 
   describe('uninstall', function() {
 
-    it('uninstalls the model', function() {
-      options.entity.name = 'user';
+    it('uninstalls the save-model-mixin mixin', function() {
+      options.entity.name = 'whatever';
 
-      fs.ensureFileSync(projectPath('app', 'models', 'user.js'));
+      fs.ensureFileSync(projectPath('app', 'mixins', 'whatevers', 'save-model-mixin.js'));
 
       return blueprint.uninstall(options).then(function() {
-        var files = walkSync(projectPath('app', 'models')).sort();
+        var files = walkSync(projectPath('app', 'mixins', 'whatevers'));
 
         assert.deepEqual(files, []);
       });

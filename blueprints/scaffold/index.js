@@ -19,23 +19,23 @@ module.exports = {
   afterInstall: function(options) {
     this._addScaffoldRoutes(options);
     return RSVP.all([
-      this.invoke('model', 'install', options),
-      this.invoke('adapter', 'install', options),
-      this.invoke('template', 'install', options),
-      this.invoke('route', 'install', options),
-      this.invoke('mixin', 'install', options),
-      this.invoke('acceptance-test', 'install', options)
+      this.invoke('scaffold-model', 'install', options),
+      this.invoke('scaffold-adapter', 'install', options),
+      this.invoke('scaffold-template', 'install', options),
+      this.invoke('scaffold-route', 'install', options),
+      this.invoke('scaffold-mixin', 'install', options),
+      this.invoke('scaffold-acceptance-test', 'install', options)
     ]);
   },
   afterUninstall: function(options) {
     this._removeScaffoldRoutes(options);
     return RSVP.all([
-      this.invoke('model', 'uninstall', options),
-      this.invoke('adapter', 'uninstall', options),
-      this.invoke('template', 'uninstall', options),
-      this.invoke('route', 'uninstall', options),
-      this.invoke('mixin', 'uninstall', options),
-      this.invoke('acceptance-test', 'uninstall', options)
+      this.invoke('scaffold-model', 'uninstall', options),
+      this.invoke('scaffold-adapter', 'uninstall', options),
+      this.invoke('scaffold-template', 'uninstall', options),
+      this.invoke('scaffold-route', 'uninstall', options),
+      this.invoke('scaffold-mixin', 'uninstall', options),
+      this.invoke('scaffold-acceptance-test', 'uninstall', options)
     ]);
   },
   _addScaffoldRoutes: function(options) {

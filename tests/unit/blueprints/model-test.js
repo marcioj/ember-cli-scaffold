@@ -23,6 +23,9 @@ describe('Unit: scaffold model', function() {
   beforeEach(function() {
     var ui = new MockUI();
     var project = new MockProject();
+    MockProject.prototype.blueprintLookupPaths = function() {
+      return [lookupPath];
+    };
     project.root = projectRoot;
 
     options   = {
@@ -33,7 +36,7 @@ describe('Unit: scaffold model', function() {
       paths: [lookupPath],
       inRepoAddon: null
     };
-    blueprint = Blueprint.lookup('model', options);
+    blueprint = Blueprint.lookup('scaffold-model', options);
   });
 
   afterEach(function() {
@@ -59,6 +62,21 @@ describe('Unit: scaffold model', function() {
 
       return blueprint.install(options).then(function() {
         assert.fileEqual(targetFile, fixturePath('overrided-model-with-fixtures-array'));
+      });
+    });
+
+  });
+
+  describe('install pods', function() {
+
+    it('installs the model', function() {
+      options.pod = true;
+      options.entity.name = 'post';
+
+      return blueprint.install(options).then(function() {
+        var files = walkSync(projectPath('app', 'post')).sort();
+
+        assert.deepEqual(files, ['model.js']);
       });
     });
 

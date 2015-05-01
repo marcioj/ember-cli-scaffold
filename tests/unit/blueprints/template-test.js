@@ -33,7 +33,7 @@ describe('Unit: scaffold template', function() {
       paths: [lookupPath],
       inRepoAddon: null
     };
-    blueprint = Blueprint.lookup('template', options);
+    blueprint = Blueprint.lookup('scaffold-template', options);
   });
 
   afterEach(function() {

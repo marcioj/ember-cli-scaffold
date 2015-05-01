@@ -23,6 +23,9 @@ describe('Unit: scaffold adapter', function() {
   beforeEach(function() {
     var ui = new MockUI();
     var project = new MockProject();
+    MockProject.prototype.blueprintLookupPaths = function() {
+      return [lookupPath];
+    };
     project.root = projectRoot;
 
     options   = {
@@ -33,7 +36,7 @@ describe('Unit: scaffold adapter', function() {
       paths: [lookupPath],
       inRepoAddon: null
     };
-    blueprint = Blueprint.lookup('adapter', options);
+    blueprint = Blueprint.lookup('scaffold-adapter', options);
   });
 
   afterEach(function() {
@@ -51,6 +54,21 @@ describe('Unit: scaffold adapter', function() {
 
         assert.deepEqual(files, ['user.js']);
         assert.fileEqual(fixturePath('fixture-adapter'), projectPath('app', 'adapters', 'user.js'));
+      });
+    });
+
+  });
+
+  describe('install pods', function() {
+
+    it('installs the adapter', function() {
+      options.pod = true;
+      options.entity.name = 'post';
+
+      return blueprint.install(options).then(function() {
+        var files = walkSync(projectPath('app', 'post')).sort();
+
+        assert.deepEqual(files, ['adapter.js']);
       });
     });
 

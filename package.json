@@ -15,7 +15,6 @@
   "author": "Marcio Junior",
   "license": "MIT",
   "devDependencies": {
-    "chalk": "1.0.0",
     "ember-cli": "0.2.3",
     "ember-cli-release": "0.2.3",
     "mocha": "^2.0.1",
@@ -29,6 +28,7 @@
     "configPath": "tests/dummy/config"
   },
   "dependencies": {
+    "chalk": "1.0.0",
     "ember-router-generator": "^0.1.1",
     "fs-extra": "^0.12.0",
     "inflection": "^1.5.1",

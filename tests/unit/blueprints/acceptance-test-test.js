@@ -33,7 +33,7 @@ describe('Unit: scaffold acceptance test', function() {
       paths: [lookupPath],
       inRepoAddon: null
     };
-    blueprint = Blueprint.lookup('acceptance-test', options);
+    blueprint = Blueprint.lookup('scaffold-acceptance-test', options);
   });
 
   afterEach(function() {

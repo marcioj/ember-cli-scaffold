@@ -33,7 +33,7 @@ describe('Unit: scaffold save model mixin', function() {
       paths: [lookupPath],
       inRepoAddon: null
     };
-    blueprint = Blueprint.lookup('mixin', options);
+    blueprint = Blueprint.lookup('scaffold-mixin', options);
   });
 
   afterEach(function() {

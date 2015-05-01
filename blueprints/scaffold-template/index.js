@@ -19,15 +19,15 @@ module.exports = {
     return {
       __name__: function(options) {
         if (options.pod && options.hasPathToken) {
-          return options.blueprintName;
+          return 'template';
         }
         return inflection.pluralize(options.dasherizedModuleName);
       },
       __path__: function(options) {
-        var blueprintName = options.blueprintName;
+        var blueprintName = 'template';
 
         if(blueprintName.match(/-test/)) {
-          blueprintName = options.blueprintName.slice(0, options.blueprintName.indexOf('-test'));
+          blueprintName = blueprintName.slice(0, blueprintName.indexOf('-test'));
         }
         if (options.pod && options.hasPathToken) {
           return path.join(options.podPath, inflection.pluralize(options.dasherizedModuleName));

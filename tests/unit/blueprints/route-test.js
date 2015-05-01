@@ -33,7 +33,7 @@ describe('Unit: scaffold route', function() {
       paths: [lookupPath],
       inRepoAddon: null
     };
-    blueprint = Blueprint.lookup('route', options);
+    blueprint = Blueprint.lookup('scaffold-route', options);
   });
 
   afterEach(function() {

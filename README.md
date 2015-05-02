@@ -9,14 +9,14 @@
 
 In your ember-cli app, do `npm install --save-dev ember-cli-scaffold`
 
-## Running
+## Usage
 
 ```sh
 ember generate scaffold user first_name:string last_name:string age:number
 open http://localhost:4200/users
 ```
 
-The generated files are the following:
+This command generate the following files:
 
 - app/adapters/user.js
 - app/mixins/users/save-model-mixin.js
@@ -33,10 +33,7 @@ The generated files are the following:
 
 They contain all the CRUD operations and an acceptance test with all tests passing.
 
-## TODO
-
-- [ ] Handle relationships
-- [ ] Pod structure support
+It's also possible to generate using the pod structure, just pass the `-pod` flag to scaffold generator.
 
 ## Running Tests
 
@@ -45,10 +42,10 @@ They contain all the CRUD operations and an acceptance test with all tests passi
 ## Contributing
 
 1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+1. Create your feature branch (`git checkout -b my-new-feature`)
+1. Commit your changes (`git commit -am 'Add some feature'`)
+1. Push to the branch (`git push origin my-new-feature`)
+1. Create new Pull Request
 
 [travis]: https://travis-ci.org/marcioj/ember-cli-scaffold
 [travis_badge]: https://api.travis-ci.org/marcioj/ember-cli-scaffold.svg?branch=master

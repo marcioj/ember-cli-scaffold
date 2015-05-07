@@ -23,6 +23,7 @@ describe('scaffold blueprint', function() {
   var ui;
 
   beforeEach(function() {
+    fs.mkdirsSync(projectRoot);
     ui = new MockUI();
     var project = new MockProject();
     MockProject.prototype.blueprintLookupPaths = function() {

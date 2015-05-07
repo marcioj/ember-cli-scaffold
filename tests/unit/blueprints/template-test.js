@@ -21,6 +21,7 @@ describe('Unit: scaffold template', function() {
   var entityName;
 
   beforeEach(function() {
+    fs.mkdirsSync(projectRoot);
     var ui = new MockUI();
     var project = new MockProject();
     project.root = projectRoot;

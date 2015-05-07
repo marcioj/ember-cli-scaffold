@@ -4,7 +4,7 @@ var assert = require('assert');
 var path = require('path');
 var fs = require('fs-extra');
 var root = process.cwd();
-var projectRoot = require('os').tmpDir();
+var projectRoot = path.join(require('os').tmpDir(), 'ember-cli-scaffold-tests');
 var lookupPath = path.join(root, 'blueprints');
 var runCommand = require('ember-cli/tests/helpers/run-command');
 
@@ -37,6 +37,7 @@ function updatePackageJson(packagePath, func) {
 }
 
 module.exports.setupTestApp = function setupTestApp(name) {
+  fs.mkdirsSync(projectRoot);
   process.chdir(projectRoot);
   return runCommand(path.join(root, 'node_modules', 'ember-cli', 'bin', 'ember'), 'new', name, '--skip-git', '--skip-npm').then(function() {
     process.chdir(path.join('.', name));

@@ -21,6 +21,7 @@ describe('Unit: scaffold adapter', function() {
   var entityName;
 
   beforeEach(function() {
+    fs.mkdirsSync(projectRoot);
     var ui = new MockUI();
     var project = new MockProject();
     MockProject.prototype.blueprintLookupPaths = function() {

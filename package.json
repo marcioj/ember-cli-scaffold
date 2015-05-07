@@ -6,7 +6,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha --reporter spec tests/**/*-test.js"
+    "test": "mocha --reporter spec 'tests/**/*-test.js'"
   },
   "repository": "https://github.com/marcioj/ember-cli-scaffold",
   "engines": {

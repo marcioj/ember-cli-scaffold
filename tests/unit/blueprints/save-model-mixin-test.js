@@ -9,7 +9,7 @@ var remove            = Promise.denodeify(fs.remove);
 var assert            = require('assert');
 var path              = require('path');
 var walkSync          = require('walk-sync');
-var testHelper        = require('../test-helper');
+var testHelper        = require('../../test-helper');
 var projectPath       = testHelper.projectPath;
 var fixturePath       = testHelper.fixturePath;
 var lookupPath        = testHelper.lookupPath;
@@ -21,6 +21,7 @@ describe('Unit: scaffold save model mixin', function() {
   var entityName;
 
   beforeEach(function() {
+    fs.mkdirsSync(projectRoot);
     var ui = new MockUI();
     var project = new MockProject();
     project.root = projectRoot;

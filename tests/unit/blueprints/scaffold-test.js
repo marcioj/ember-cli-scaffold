@@ -10,7 +10,7 @@ var assert            = require('assert');
 var path              = require('path');
 var walkSync          = require('walk-sync');
 var chalk             = require('chalk');
-var testHelper        = require('../test-helper');
+var testHelper        = require('../../test-helper');
 var projectPath       = testHelper.projectPath;
 var fixturePath       = testHelper.fixturePath;
 var lookupPath        = testHelper.lookupPath;
@@ -23,6 +23,7 @@ describe('scaffold blueprint', function() {
   var ui;
 
   beforeEach(function() {
+    fs.mkdirsSync(projectRoot);
     ui = new MockUI();
     var project = new MockProject();
     MockProject.prototype.blueprintLookupPaths = function() {

@@ -20,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      {{#each user in model}}
+      {{#each model as |user|}}
         <tr>
           <td>
             {{user.firstName}}

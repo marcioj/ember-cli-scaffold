@@ -6,15 +6,9 @@ var application;
 var originalConfirm;
 var confirmCalledWith;
 
-function defineFixturesFor(name, fixtures) {
-  var modelClass = application.__container__.lookupFactory('model:' + name);
-  modelClass.FIXTURES = fixtures;
-}
-
 module('Acceptance: User', {
   beforeEach: function() {
     application = startApp();
-    defineFixturesFor('user', []);
     originalConfirm = window.confirm;
     window.confirm = function() {
       confirmCalledWith = [].slice.call(arguments);
@@ -38,7 +32,7 @@ test('visiting /users without data', function(assert) {
 });
 
 test('visiting /users with data', function(assert) {
-  defineFixturesFor('user', [{ id: 1, firstName: 'MyString', lastName: 'MyString' }]);
+  server.create('user');
   visit('/users');
 
   andThen(function() {
@@ -68,7 +62,7 @@ test('create a new user', function(assert) {
 });
 
 test('update an existing user', function(assert) {
-  defineFixturesFor('user', [{ id: 1 }]);
+  server.create('user');
   visit('/users');
   click('a:contains(Edit)');
 
@@ -88,7 +82,7 @@ test('update an existing user', function(assert) {
 });
 
 test('show an existing user', function(assert) {
-  defineFixturesFor('user', [{ id: 1, firstName: 'MyString', lastName: 'MyString' }]);
+  server.create('user');
   visit('/users');
   click('a:contains(Show)');
 
@@ -101,7 +95,7 @@ test('show an existing user', function(assert) {
 });
 
 test('delete a user', function(assert) {
-  defineFixturesFor('user', [{ id: 1, firstName: 'MyString', lastName: 'MyString' }]);
+  server.create('user');
   visit('/users');
   click('a:contains(Remove)');
 

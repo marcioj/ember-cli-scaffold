@@ -17,7 +17,7 @@
       </tr>
     </thead>
     <tbody>
-      {{#each <%= camelizedModuleName %> in model}}
+      {{#each model as |<%= camelizedModuleName %>|}}
         <tr><% attrs.forEach(function(attr) { %>
           <td>
             {{<%= camelizedModuleName %>.<%= attr.name %>}}

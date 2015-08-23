@@ -47,7 +47,6 @@ describe('scaffold blueprint', function() {
   });
 
   describe('install', function() {
-
     it('add the resource definition to router.js', function() {
       options.entity.name = 'user';
       var targetFile = projectPath('app', 'router.js');

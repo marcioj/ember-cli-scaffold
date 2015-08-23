@@ -6,15 +6,9 @@ var application;
 var originalConfirm;
 var confirmCalledWith;
 
-function defineFixturesFor(name, fixtures) {
-  var modelClass = application.__container__.lookupFactory('model:' + name);
-  modelClass.FIXTURES = fixtures;
-}
-
 module('Acceptance: <%= classifiedModuleName %>', {
   beforeEach: function() {
     application = startApp();
-    defineFixturesFor('<%= dasherizedModuleName %>', []);
     originalConfirm = window.confirm;
     window.confirm = function() {
       confirmCalledWith = [].slice.call(arguments);
@@ -38,7 +32,7 @@ test('visiting /<%= dasherizedModuleNamePlural %> without data', function(assert
 });
 
 test('visiting /<%= dasherizedModuleNamePlural %> with data', function(assert) {
-  defineFixturesFor('<%= dasherizedModuleName %>', [<%= sampleData %>]);
+  server.create('<%= dasherizedModuleName %>');
   visit('/<%= dasherizedModuleNamePlural %>');
 
   andThen(function() {
@@ -67,7 +61,7 @@ test('create a new <%= dasherizedModuleName %>', function(assert) {
 });
 
 test('update an existing <%= dasherizedModuleName %>', function(assert) {
-  defineFixturesFor('<%= dasherizedModuleName %>', [{ id: 1 }]);
+  server.create('<%= dasherizedModuleName %>');
   visit('/<%= dasherizedModuleNamePlural %>');
   click('a:contains(Edit)');
 
@@ -86,7 +80,7 @@ test('update an existing <%= dasherizedModuleName %>', function(assert) {
 });
 
 test('show an existing <%= dasherizedModuleName %>', function(assert) {
-  defineFixturesFor('<%= dasherizedModuleName %>', [<%= sampleData %>]);
+  server.create('<%= dasherizedModuleName %>');
   visit('/<%= dasherizedModuleNamePlural %>');
   click('a:contains(Show)');
 
@@ -98,7 +92,7 @@ test('show an existing <%= dasherizedModuleName %>', function(assert) {
 });
 
 test('delete a <%= dasherizedModuleName %>', function(assert) {
-  defineFixturesFor('<%= dasherizedModuleName %>', [<%= sampleData %>]);
+  server.create('<%= dasherizedModuleName %>');
   visit('/<%= dasherizedModuleNamePlural %>');
   click('a:contains(Remove)');
 

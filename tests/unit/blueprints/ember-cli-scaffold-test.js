@@ -9,20 +9,22 @@ var remove            = Promise.denodeify(fs.remove);
 var assert            = require('assert');
 var path              = require('path');
 var walkSync          = require('walk-sync');
+var sinon             = require('sinon');
 var testHelper        = require('../../test-helper');
 var projectPath       = testHelper.projectPath;
 var fixturePath       = testHelper.fixturePath;
 var lookupPath        = testHelper.lookupPath;
 var projectRoot       = testHelper.projectRoot;
 
-describe('Unit: scaffold adapter', function() {
+describe('scaffold blueprint', function() {
   var blueprint;
   var options;
   var entityName;
+  var ui;
 
   beforeEach(function() {
     fs.mkdirsSync(projectRoot);
-    var ui = new MockUI();
+    ui = new MockUI();
     var project = new MockProject();
     MockProject.prototype.blueprintLookupPaths = function() {
       return [lookupPath];
@@ -37,56 +39,23 @@ describe('Unit: scaffold adapter', function() {
       paths: [lookupPath],
       inRepoAddon: null
     };
-    blueprint = Blueprint.lookup('scaffold-adapter', options);
+    blueprint = Blueprint.lookup('ember-cli-scaffold', options);
+    sinon.stub(blueprint, 'addAddonToProject');
   });
 
   afterEach(function() {
+    blueprint.addAddonToProject.restore();
     return remove(projectRoot);
   });
 
   describe('install', function() {
-
-    it('installs the resource adapter', function() {
+    it('adds ember-cli-mirage to the project', function() {
       options.entity.name = 'user';
-      options.entity.options = { first_name: 'string', last_name: 'string' };
+      var targetFile = projectPath('app', 'router.js');
+      fs.copySync(fixturePath('empty-router'), targetFile);
 
       return blueprint.install(options).then(function() {
-        var files = walkSync(projectPath('app', 'adapters')).sort();
-
-        assert.deepEqual(files, ['user.js']);
-        assert.fileEqual(fixturePath('generated-adapter'), projectPath('app', 'adapters', 'user.js'));
-      });
-    });
-
-  });
-
-  describe('install pods', function() {
-
-    it('installs the adapter', function() {
-      options.pod = true;
-      options.entity.name = 'post';
-
-      return blueprint.install(options).then(function() {
-        var files = walkSync(projectPath('app', 'post')).sort();
-
-        assert.deepEqual(files, ['adapter.js']);
-      });
-    });
-
-  });
-
-  describe('uninstall', function() {
-
-    it('uninstalls the resrouce adapter', function() {
-      options.entity.name = 'user';
-      options.entity.options = { first_name: 'string', last_name: 'string' };
-
-      fs.ensureFileSync(projectPath('app', 'adapters', 'user.js'));
-
-      return blueprint.uninstall(options).then(function() {
-        var files = walkSync(projectPath('app', 'adapters')).sort();
-
-        assert.deepEqual(files, []);
+        assert.ok(blueprint.addAddonToProject.calledWith('ember-cli-mirage'));
       });
     });
 

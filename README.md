@@ -7,7 +7,7 @@
 
 ## Installation
 
-In your ember-cli app, do `npm install --save-dev ember-cli-scaffold`
+In your ember-cli app, do `ember install ember-cli-scaffold`
 
 ## Usage
 
@@ -16,7 +16,7 @@ ember generate scaffold user first_name:string last_name:string age:number
 open http://localhost:4200/users
 ```
 
-This command generate the following files:
+This command generates the following files:
 
 - app/adapters/user.js
 - app/mixins/users/save-model-mixin.js
@@ -28,10 +28,11 @@ This command generate the following files:
 - app/templates/users/index.hbs
 - app/templates/users/new.hbs
 - app/templates/users/show.hbs
-- tests/acceptance/users-test.js
 - app/models/user.js
+- app/mirage/factories/user.js
+- tests/acceptance/users-test.js
 
-They contain all the CRUD operations and an acceptance test with all tests passing.
+These files contain all the CRUD operations and an acceptance test with all tests passing. In order to provide a fake server in both development and tests [ember-cli-mirage](http://www.ember-cli-mirage.com/) is used.
 
 It's also possible to generate using the pod structure, just pass the `-pod` flag to scaffold generator.
 

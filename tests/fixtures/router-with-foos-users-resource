@@ -6,29 +6,27 @@ var Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.resource("users", function() {
-    this.route("new");
+  this.route('users', function() {
+    this.route('new');
 
-    this.route("edit", {
-      path: ":user_id/edit"
+    this.route('edit', {
+      path: ':user_id/edit'
     });
 
-    this.route("show", {
-      path: ":user_id"
+    this.route('show', {
+      path: ':user_id'
     });
   });
+  this.route('foos', function() {
+    this.route('new');
 
-  this.resource("foos", function() {
-    this.route("new");
-
-    this.route("edit", {
-      path: ":foo_id/edit"
+    this.route('edit', {
+      path: ':foo_id/edit'
     });
 
-    this.route("show", {
-      path: ":foo_id"
+    this.route('show', {
+      path: ':foo_id'
     });
   });
 });
-
 export default Router;

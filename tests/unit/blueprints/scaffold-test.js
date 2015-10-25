@@ -47,7 +47,7 @@ describe('scaffold blueprint', function() {
   });
 
   describe('install', function() {
-    it('add the resource definition to router.js', function() {
+    it('add the route definition to router.js', function() {
       options.entity.name = 'user';
       var targetFile = projectPath('app', 'router.js');
       fs.copySync(fixturePath('empty-router'), targetFile);
@@ -57,7 +57,7 @@ describe('scaffold blueprint', function() {
       });
     });
 
-    it('add the resource definition to router.js when others routes exist', function() {
+    it('add the route definition to router.js when others routes exist', function() {
       options.entity.name = 'foo';
       var targetFile = projectPath('app', 'router.js');
       fs.copySync(fixturePath('router-with-users-resource'), targetFile);

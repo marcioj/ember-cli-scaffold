@@ -30,8 +30,13 @@ describe('scaffold blueprint', function() {
       return [lookupPath];
     };
     project.root = projectRoot;
+    project._config = {
+      baseURL: '/',
+      locationType: 'auto',
+      modulePrefix: 'my-app'
+    };
 
-    options   = {
+    options = {
       entity: { name: null },
       ui: ui,
       project: project,

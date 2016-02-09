@@ -29,7 +29,9 @@ describe('Acceptance: scaffold smoke test', function() {
     var text = fs.readFileSync(path, { encoding: 'utf8' });
     var index = text.indexOf(afterPattern);
 
-    if (index === -1) { return; }
+    if (index === -1) {
+      throw new Error('Pattern "' + afterPattern + '" not found into ' + path);
+    }
 
     index += afterPattern.length;
 
@@ -44,14 +46,31 @@ describe('Acceptance: scaffold smoke test', function() {
 
   it('tests pass', function() {
     var indexHtml = path.join(projectRoot, 'my-app', 'tests', 'index.html');
-    var environment = path.join(projectRoot, 'my-app', 'config', 'environment.js');
 
     // phantomjs doesn't support Function.prototype.bind :(
-    insertTextInto(indexHtml, '  <head>\n', bindPolyfill);
+    insertTextInto(indexHtml, '  <head>', bindPolyfill);
 
     return ember('generate ember-cli-scaffold')
       .then(function() {
         return ember('generate scaffold user name:string age:number');
+      })
+      .then(function() {
+        return ember('test');
+      });
+  });
+
+  it('works with podModulePrefix', function() {
+    var indexHtml = path.join(projectRoot, 'my-app', 'tests', 'index.html');
+    var environment = path.join(projectRoot, 'my-app', 'config', 'environment.js');
+
+    // phantomjs doesn't support Function.prototype.bind :(
+    insertTextInto(indexHtml, '  <head>', bindPolyfill);
+
+    insertTextInto(environment, '    modulePrefix: \'my-app\',', '    podModulePrefix: \'my-app/pods\',');
+
+    return ember('generate ember-cli-scaffold')
+      .then(function() {
+        return ember('generate scaffold user name:string age:number --pod');
       })
       .then(function() {
         return ember('test');

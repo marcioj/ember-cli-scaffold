@@ -25,6 +25,11 @@ describe('Unit: scaffold route', function() {
     var ui = new MockUI();
     var project = new MockProject();
     project.root = projectRoot;
+    project._config = {
+      baseURL: '/',
+      locationType: 'auto',
+      modulePrefix: 'my-app'
+    };
 
     options   = {
       entity: { name: null },

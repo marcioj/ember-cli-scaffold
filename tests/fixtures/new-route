@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import SaveModelMixin from '../../mixins/bros/save-model-mixin';
+import SaveModelMixin from 'my-app/mixins/bros/save-model-mixin';
 
 export default Ember.Route.extend(SaveModelMixin, {
   model: function() {

@@ -11,11 +11,10 @@ export default Ember.Mixin.create({
       });
     }
   },
-  deactivate: function() {
-    if (this.currentModel.get('isNew')) {
-      this.currentModel.deleteRecord();
-    } else {
-      this.currentModel.rollbackAttributes();
-    }
-  }
+
+  willTransition() {
+    this._super();
+    const record = this.controller.get('record');
+    record.rollbackAttributes();
+  },
 });

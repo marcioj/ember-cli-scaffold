@@ -9,12 +9,13 @@ export default Ember.Mixin.create({
       }, function() {
         console.log('Failed to save the model');
       });
-    }
+    },
+
+    willTransition() {
+      this._super(...arguments);
+      const record = this.controller.get('model');
+      record.rollbackAttributes();
+    },
   },
 
-  willTransition() {
-    this._super();
-    const record = this.controller.get('record');
-    record.rollbackAttributes();
-  },
 });

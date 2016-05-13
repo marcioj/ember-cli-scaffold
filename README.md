@@ -18,7 +18,6 @@ open http://localhost:4200/users
 
 This command generates the following files:
 
-- app/adapters/user.js
 - app/mixins/users/save-model-mixin.js
 - app/routes/users/edit.js
 - app/routes/users/index.js

@@ -25,7 +25,6 @@ module.exports = {
     var resourcePath = locals.dasherizedModuleNamePlural;
 
     var mirageConfig = this.insertIntoFile('app/mirage/config.js', [
-      'this.namespace = \'api\';',
       'this.get(\'/' + resourcePath + '\');',
       'this.get(\'/' + resourcePath + '/:id\');',
       'this.post(\'/'+ resourcePath + '\');',
@@ -38,7 +37,6 @@ module.exports = {
     return RSVP.all([
       mirageConfig,
       this.invoke('model', 'install', options),
-      this.invoke('scaffold-adapter', 'install', options),
       this.invoke('scaffold-template', 'install', options),
       this.invoke('scaffold-route', 'install', options),
       this.invoke('scaffold-mixin', 'install', options),
@@ -49,7 +47,6 @@ module.exports = {
     this._removeScaffoldRoutes(options);
     return RSVP.all([
       this.invoke('model', 'uninstall', options),
-      this.invoke('scaffold-adapter', 'uninstall', options),
       this.invoke('scaffold-template', 'uninstall', options),
       this.invoke('scaffold-route', 'uninstall', options),
       this.invoke('scaffold-mixin', 'uninstall', options),

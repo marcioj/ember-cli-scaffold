@@ -36,7 +36,7 @@ These files contain all the CRUD operations and an acceptance test with all test
 
 It's also possible to generate using the pod structure, just pass the `-pod` flag to scaffold generator.
 
-To remove the generated files just use the `ember destroy scaffold` command. For instance `ember destroy scaffold user first_name:string last_name:string age:number`.
+To remove the generated files just use the `ember destroy scaffold <model-name>` command. For instance `ember destroy scaffold user`.
 
 ## Running Tests
 

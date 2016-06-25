@@ -3,6 +3,8 @@
 // Description: like ember install addon-name but linking from this source code
 // Usage: call ./install-local.js from within a ember-cli project
 
+'use strict';
+
 var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').execSync;

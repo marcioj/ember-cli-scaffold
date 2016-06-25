@@ -55,7 +55,7 @@ describe('scaffold blueprint', function() {
       fs.copySync(fixturePath('empty-router'), targetFile);
 
       return blueprint.install(options).then(function() {
-        assert.ok(blueprint.addAddonToProject.calledWith({ name: 'ember-cli-mirage', target: '0.1.x' }));
+        assert.ok(blueprint.addAddonToProject.calledWith('ember-cli-mirage'));
       });
     });
 

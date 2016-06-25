@@ -15,7 +15,7 @@
   "author": "Marcio Junior",
   "license": "MIT",
   "devDependencies": {
-    "ember-cli": "^1.13.8",
+    "ember-cli": "^2.0.0",
     "ember-cli-release": "0.2.3",
     "mocha": "^2.0.1",
     "mocha-jshint": "^1.0.0",

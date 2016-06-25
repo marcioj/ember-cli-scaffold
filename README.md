@@ -5,6 +5,10 @@
 [![Build Status][travis_badge]][travis]
 [![Ember Observer Score][ember_observer_badge]][ember_observer]
 
+## Requirements
+
+This addon requires Ember, Ember Data and Ember CLI at version 2.0 or higher. Additionally, it will install ember-cli-mirage, of which at least version 0.2.0 is required.
+
 ## Installation
 
 In your ember-cli app, do `ember install ember-cli-scaffold`
@@ -18,7 +22,6 @@ open http://localhost:4200/users
 
 This command generates the following files:
 
-- app/adapters/user.js
 - app/mixins/users/save-model-mixin.js
 - app/routes/users/edit.js
 - app/routes/users/index.js

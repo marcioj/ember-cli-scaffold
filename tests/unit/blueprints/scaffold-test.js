@@ -42,7 +42,10 @@ describe('scaffold blueprint', function() {
       project: project,
       target: projectRoot,
       paths: [lookupPath],
-      inRepoAddon: null
+      inRepoAddon: null,
+      taskOptions: {
+        skipModel: true
+      }
     };
     blueprint = Blueprint.lookup('scaffold', options);
   });

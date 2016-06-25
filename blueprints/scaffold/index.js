@@ -23,38 +23,51 @@ module.exports = {
 
     var locals = buildNaming(options.entity.name);
     var resourcePath = locals.dasherizedModuleNamePlural;
+    var skipModel = options.taskOptions.skipModel;
 
-    var mirageConfig = this.insertIntoFile('app/mirage/config.js', [
-      'this.namespace = \'api\';',
+    var mirageConfig = this.insertIntoFile('mirage/config.js', [
       'this.get(\'/' + resourcePath + '\');',
       'this.get(\'/' + resourcePath + '/:id\');',
       'this.post(\'/'+ resourcePath + '\');',
       'this.del(\'/'+ resourcePath + '/:id\');',
-      'this.put(\'/'+ resourcePath + '/:id\');'
+      'this.patch(\'/'+ resourcePath + '/:id\');'
     ].join('\n'), {
       after: 'export default function() {\n'
     });
 
-    return RSVP.all([
+    var tasks = [
       mirageConfig,
-      this.invoke('model', 'install', options),
-      this.invoke('scaffold-adapter', 'install', options),
       this.invoke('scaffold-template', 'install', options),
       this.invoke('scaffold-route', 'install', options),
       this.invoke('scaffold-mixin', 'install', options),
       this.invoke('scaffold-acceptance-test', 'install', options)
-    ]);
+    ];
+    if (!skipModel) {
+      tasks.push(
+        this.invoke('model', 'install', options),
+        this.invoke('mirage-model', 'install', options)
+      );
+    }
+
+    return RSVP.all(tasks);
   },
   afterUninstall: function(options) {
     this._removeScaffoldRoutes(options);
-    return RSVP.all([
-      this.invoke('model', 'uninstall', options),
-      this.invoke('scaffold-adapter', 'uninstall', options),
+    var skipModel = options.taskOptions.skipModel;
+    var tasks = [
       this.invoke('scaffold-template', 'uninstall', options),
       this.invoke('scaffold-route', 'uninstall', options),
       this.invoke('scaffold-mixin', 'uninstall', options),
       this.invoke('scaffold-acceptance-test', 'uninstall', options)
-    ]);
+    ];
+    if (!skipModel) {
+      tasks.push(
+        this.invoke('model', 'uninstall', options),
+        this.invoke('mirage-model', 'uninstall', options)
+      )
+    }
+
+    return RSVP.all(tasks);
   },
   _addScaffoldRoutes: function(options) {
     var routerFile = path.join(options.target, 'app', 'router.js');

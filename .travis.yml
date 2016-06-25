@@ -20,3 +20,6 @@ script:
 
 notifications:
   email: false
+
+node_js:
+  - '4'

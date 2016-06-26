@@ -5,6 +5,7 @@ var MockProject       = require('ember-cli/tests/helpers/mock-project');
 var Blueprint         = require('ember-cli/lib/models/blueprint');
 var Promise           = require('ember-cli/lib/ext/promise');
 var fs                = require('fs-extra');
+var sinon             = require('sinon');
 var remove            = Promise.denodeify(fs.remove);
 var assert            = require('assert');
 var path              = require('path');
@@ -42,15 +43,21 @@ describe('scaffold blueprint', function() {
       project: project,
       target: projectRoot,
       paths: [lookupPath],
-      inRepoAddon: null,
-      taskOptions: {
-        skipModel: true
-      }
+      inRepoAddon: null
     };
     blueprint = Blueprint.lookup('scaffold', options);
+    sinon.stub(blueprint, 'invoke').returns(Promise.resolve());
   });
 
   afterEach(function() {
+    assert.ok(blueprint.invoke.calledWith('scaffold-template'));
+    assert.ok(blueprint.invoke.calledWith('scaffold-route'));
+    assert.ok(blueprint.invoke.calledWith('scaffold-mixin'));
+    assert.ok(blueprint.invoke.calledWith('scaffold-acceptance-test'));
+    assert.ok(blueprint.invoke.calledWith('model'));
+    assert.ok(blueprint.invoke.calledWith('mirage-model'));
+
+    blueprint.invoke.restore();
     return remove(projectRoot);
   });
 

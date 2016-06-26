@@ -23,8 +23,6 @@ module.exports = {
 
     var locals = buildNaming(options.entity.name);
     var resourcePath = locals.dasherizedModuleNamePlural;
-    var skipModel = options.taskOptions.skipModel;
-
     var mirageConfig = this.insertIntoFile('mirage/config.js', [
       'this.get(\'/' + resourcePath + '\');',
       'this.get(\'/' + resourcePath + '/:id\');',
@@ -40,32 +38,24 @@ module.exports = {
       this.invoke('scaffold-template', 'install', options),
       this.invoke('scaffold-route', 'install', options),
       this.invoke('scaffold-mixin', 'install', options),
-      this.invoke('scaffold-acceptance-test', 'install', options)
+      this.invoke('scaffold-acceptance-test', 'install', options),
+      this.invoke('model', 'install', options),
+      this.invoke('mirage-model', 'install', options)
     ];
-    if (!skipModel) {
-      tasks.push(
-        this.invoke('model', 'install', options),
-        this.invoke('mirage-model', 'install', options)
-      );
-    }
 
     return RSVP.all(tasks);
   },
   afterUninstall: function(options) {
     this._removeScaffoldRoutes(options);
-    var skipModel = options.taskOptions.skipModel;
+
     var tasks = [
       this.invoke('scaffold-template', 'uninstall', options),
       this.invoke('scaffold-route', 'uninstall', options),
       this.invoke('scaffold-mixin', 'uninstall', options),
-      this.invoke('scaffold-acceptance-test', 'uninstall', options)
+      this.invoke('scaffold-acceptance-test', 'uninstall', options),
+      this.invoke('model', 'uninstall', options),
+      this.invoke('mirage-model', 'uninstall', options)
     ];
-    if (!skipModel) {
-      tasks.push(
-        this.invoke('model', 'uninstall', options),
-        this.invoke('mirage-model', 'uninstall', options)
-      )
-    }
 
     return RSVP.all(tasks);
   },
@@ -97,4 +87,3 @@ module.exports = {
     return locals;
   }
 }
-

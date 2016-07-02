@@ -16,6 +16,10 @@ Router.map(function() {
     this.route('show', {
       path: ':user_id'
     });
+
+    this.route('destroy', {
+      path: ':user_id/destroy'
+    });
   });
   this.route('foos', function() {
     this.route('new');
@@ -26,6 +30,10 @@ Router.map(function() {
 
     this.route('show', {
       path: ':foo_id'
+    });
+
+    this.route('destroy', {
+      path: ':foo_id/destroy'
     });
   });
 });

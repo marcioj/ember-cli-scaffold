@@ -1,0 +1,5 @@
+<p>Are you sure?</p>
+
+<form {{action "confirm" model on="submit"}}>
+  <p><input type="submit" value="Confirm to destroy"> or {{#link-to "users"}}cancel{{/link-to}}</p>
+</form>

@@ -3,22 +3,13 @@ import { module, test } from 'qunit';
 import startApp from '../helpers/start-app';
 
 var application;
-var originalConfirm;
-var confirmCalledWith;
 
 module('Acceptance: <%= classifiedModuleName %>', {
   beforeEach: function() {
     application = startApp();
-    originalConfirm = window.confirm;
-    window.confirm = function() {
-      confirmCalledWith = [].slice.call(arguments);
-      return true;
-    };
   },
   afterEach: function() {
     Ember.run(application, 'destroy');
-    window.confirm = originalConfirm;
-    confirmCalledWith = null;
   }
 });
 
@@ -91,14 +82,17 @@ test('show an existing <%= dasherizedModuleName %>', function(assert) {
   });
 });
 
-test('delete a <%= dasherizedModuleName %>', function(assert) {
+test('destroy a <%= dasherizedModuleName %>', function(assert) {
   server.create('<%= dasherizedModuleName %>');
   visit('/<%= dasherizedModuleNamePlural %>');
-  click('a:contains(Remove)');
+  click('a:contains(Destroy)');
+
+  andThen(function() {
+    click('input:submit');
+  });
 
   andThen(function() {
     assert.equal(currentPath(), '<%= dasherizedModuleNamePlural %>.index');
-    assert.deepEqual(confirmCalledWith, ['Are you sure?']);
     assert.equal(find('#blankslate').length, 1);
   });
 });

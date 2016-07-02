@@ -29,7 +29,7 @@
             {{link-to "Show" "<%= dasherizedModuleNamePlural %>.show" <%= camelizedModuleName %>}}
           </td>
           <td>
-            <a href="#" {{action "remove" <%= camelizedModuleName %>}}>Remove</a>
+            {{link-to "Destroy" "<%= dasherizedModuleNamePlural %>.destroy" <%= camelizedModuleName %>}}
           </td>
         </tr>
       {{/each}}

@@ -3,22 +3,13 @@ import { module, test } from 'qunit';
 import startApp from '../helpers/start-app';
 
 var application;
-var originalConfirm;
-var confirmCalledWith;
 
 module('Acceptance: User', {
   beforeEach: function() {
     application = startApp();
-    originalConfirm = window.confirm;
-    window.confirm = function() {
-      confirmCalledWith = [].slice.call(arguments);
-      return true;
-    };
   },
   afterEach: function() {
     Ember.run(application, 'destroy');
-    window.confirm = originalConfirm;
-    confirmCalledWith = null;
   }
 });
 
@@ -94,14 +85,17 @@ test('show an existing user', function(assert) {
   });
 });
 
-test('delete a user', function(assert) {
+test('destroy a user', function(assert) {
   server.create('user');
   visit('/users');
-  click('a:contains(Remove)');
+  click('a:contains(Destroy)');
+
+  andThen(function() {
+    click('input:submit');
+  });
 
   andThen(function() {
     assert.equal(currentPath(), 'users.index');
-    assert.deepEqual(confirmCalledWith, ['Are you sure?']);
     assert.equal(find('#blankslate').length, 1);
   });
 });

@@ -35,7 +35,7 @@
             {{link-to "Show" "users.show" user}}
           </td>
           <td>
-            <a href="#" {{action "remove" user}}>Remove</a>
+            {{link-to "Destroy" "users.destroy" user}}
           </td>
         </tr>
       {{/each}}

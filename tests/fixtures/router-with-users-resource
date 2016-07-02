@@ -16,6 +16,10 @@ Router.map(function() {
     this.route('show', {
       path: ':user_id'
     });
+
+    this.route('destroy', {
+      path: ':user_id/destroy'
+    });
   });
 });
 export default Router;

@@ -50,11 +50,12 @@ describe('Unit: scaffold template', function() {
       return blueprint.install(options).then(function() {
         var files = walkSync(projectPath('app', 'templates')).sort();
 
-        assert.deepEqual(files, ['users/', 'users/-form.hbs', 'users/edit.hbs', 'users/index.hbs', 'users/new.hbs', 'users/show.hbs']);
+        assert.deepEqual(files, ['users/', 'users/-form.hbs', 'users/destroy.hbs', 'users/edit.hbs', 'users/index.hbs', 'users/new.hbs', 'users/show.hbs']);
         assert.fileEqual(fixturePath('show-template'), projectPath('app', 'templates', 'users', 'show.hbs'));
         assert.fileEqual(fixturePath('new-template'), projectPath('app', 'templates', 'users', 'new.hbs'));
         assert.fileEqual(fixturePath('index-template'), projectPath('app', 'templates', 'users', 'index.hbs'));
         assert.fileEqual(fixturePath('edit-template'), projectPath('app', 'templates', 'users', 'edit.hbs'));
+        assert.fileEqual(fixturePath('destroy-template'), projectPath('app', 'templates', 'users', 'destroy.hbs'));
         assert.fileEqual(fixturePath('form-template'), projectPath('app', 'templates', 'users', '-form.hbs'));
       });
     });
@@ -74,6 +75,8 @@ describe('Unit: scaffold template', function() {
         assert.deepEqual(files, [
           '-form/',
           '-form/template.hbs',
+          'destroy/',
+          'destroy/template.hbs',
           'edit/',
           'edit/template.hbs',
           'index/',
@@ -88,6 +91,7 @@ describe('Unit: scaffold template', function() {
         assert.fileEqual(fixturePath('new-template'), projectPath('app', 'users', 'new', 'template.hbs'));
         assert.fileEqual(fixturePath('index-template'), projectPath('app', 'users', 'index', 'template.hbs'));
         assert.fileEqual(fixturePath('edit-template'), projectPath('app', 'users', 'edit', 'template.hbs'));
+        assert.fileEqual(fixturePath('destroy-template'), projectPath('app', 'users', 'destroy', 'template.hbs'));
         assert.fileEqual(fixturePath('form-template'), projectPath('app', 'users', '-form', 'template.hbs'));
       });
     });

@@ -8,7 +8,8 @@ var buildNaming = require('../../lib/utilities/entity').buildNaming;
 var filesToPodFilesMapping = {
   '__root__/__path__/__name__/edit.js': '__root__/__path__/edit/__name__.js',
   '__root__/__path__/__name__/index.js': '__root__/__path__/index/__name__.js',
-  '__root__/__path__/__name__/new.js': '__root__/__path__/new/__name__.js'
+  '__root__/__path__/__name__/new.js': '__root__/__path__/new/__name__.js',
+  '__root__/__path__/__name__/destroy.js': '__root__/__path__/destroy/__name__.js'
 };
 
 module.exports = {

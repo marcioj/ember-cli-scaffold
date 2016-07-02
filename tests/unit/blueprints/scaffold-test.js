@@ -72,7 +72,7 @@ describe('scaffold blueprint', function() {
       });
     });
 
-    it('add the route definition to router.js when others routes exist', function() {
+    it('add the route definition to router.js when other routes exist', function() {
       options.entity.name = 'foo';
       var targetFile = projectPath('app', 'router.js');
       fs.copySync(fixturePath('router-with-users-resource'), targetFile);
